@@ -24,7 +24,7 @@
 | `drafts/<course>/<slug>.md` | Claude | পাঠের উৎস: voice, caption, দৃশ্য |
 | `drafts/<course>/<slug>.voice.txt` | `tools/lesson.mjs voice` | চূড়ান্ত script, ড্রাফটের voice থেকে |
 | `public/og/<course>/<slug>.png` | `tools/lesson.mjs og` | thumbnail আর শেয়ারের ছবি, ১২০০×৬৩০ |
-| `public/audio/<course>/<slug>.mp3` | মালিক | অডিও |
+| `public/audio/<course>/<slug>.mp3` | মালিক বানান, Claude ছোট করে | অডিও, 64 kbps mono MP3 |
 | `data/<course>/<slug>.json` | `tools/lesson.mjs sync` | সাইট যা পড়ে |
 
 - `slug` হবে ছোট হাতের ইংরেজি, kebab-case (`https`, `dns-lookup`)।
@@ -57,6 +57,8 @@
 
 মালিক রাজি হওয়া script দিয়ে ElevenLabs প্যানেলে (Eleven v4) অডিও বানিয়ে `public/audio/<course>/`-এ রাখেন। অডিও বানানোর সময় লেখা বদলালে বদলানো লেখাটা চ্যাটে দেন। কখনো একাধিক অডিও রাখতে পারেন, যেমন `https1.mp3` আর `https2.mp3`।
 
+ডাউনলোডের format: WAV 44.1 kHz পাওয়া গেলে সেটা, না হলে MP3 128 kbps। ছোট করার কাজ Claude করে।
+
 ### ৪. ড্রাফট, sync আর যাচাই
 
 মালিক অডিও রেখেছেন বললে:
@@ -67,10 +69,10 @@
    - মালিকের লেখায় তথ্যগত ভুল চোখে পড়লে চুপচাপ ঠিক করবে না, মালিককে জানাবে।
 2. **`voice` চালাও:** `node tools/lesson.mjs voice <course> <slug>`। তারপর `.voice.txt` চূড়ান্ত script-এর সাথে `diff` করে দেখো হুবহু এক কি না।
 3. **`og` চালাও:** `node tools/lesson.mjs og <course> <slug>`, তারপর ছবিটা খুলে দেখো।
-4. **একাধিক অডিও থাকলে একটা বেছে নাও:**
-   - প্রতিটার নীরবতা মেপে দেখো কোনটায় বাক্যগুলো সবচেয়ে পরিষ্কারভাবে আলাদা করা যায়।
-   - সেটার নাম দাও `<slug>.mp3`। বাকিগুলো মুছবে না, scratchpad-এ সরিয়ে রাখো।
-   - মালিককে জানাও কোনটা রেখেছ আর কেন।
+4. **অডিও তৈরি করো:**
+   - একাধিক অডিও থাকলে প্রতিটার নীরবতা মেপে দেখো কোনটায় বাক্যগুলো সবচেয়ে পরিষ্কারভাবে আলাদা করা যায়। মালিককে জানাও কোনটা রেখেছ আর কেন।
+   - বাছা ফাইল থেকে 64 kbps mono MP3 বানাও: `ffmpeg -i <ফাইল> -ac 1 -b:a 64k public/audio/<course>/<slug>.mp3`। প্লেয়ার পুরো অডিও আগে নামিয়ে নেয়, তাই ফাইল ছোট হলে পাঠ তাড়াতাড়ি তৈরি হয়। কথার জন্য 64 kbps যথেষ্ট।
+   - মালিকের আসল ফাইলগুলো মুছবে না, scratchpad-এ সরিয়ে রাখো। `public/audio/`-এ শুধু `<slug>.mp3` থাকবে।
 5. **sync চালাও:** `node tools/lesson.mjs sync <course> <slug>`।
    - শুরুতে script মিলিয়ে দেখে `.voice.txt` আর ড্রাফটের voice হুবহু এক কি না। না মিললে থেমে যায়।
    - তারপর অডিওর নীরবতা মেপে প্রতিটা বাক্যের শুরুর সময় বের করে।
