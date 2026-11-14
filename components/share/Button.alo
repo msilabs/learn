@@ -1,0 +1,60 @@
+<!-- শেয়ার বোতাম। props: url (পুরো ঠিকানা), title, label (লেখাসহ বোতাম হলে true)।
+     মোবাইলে share sheet খোলে, ডেস্কটপে লিংক কপি করে। -->
+<template>
+    <button class="share {{ props.label ? 'with-label' : null }} {{ props.class }}" type="button" data-url="{{ props.url }}" data-title="{{ props.title }}" aria-label="লিংক শেয়ার করুন: {{ props.title }}" title="লিংক কপি করুন">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/>
+            <path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/>
+        </svg>
+        <template if="props.label"><span class="txt">লিংক শেয়ার</span></template>
+        <span class="tip" role="status"></span>
+    </button>
+</template>
+
+<style>
+    .share{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;width:36px;height:36px;padding:0;border-radius:10px;border:1px solid var(--border-2);background:var(--surface);color:var(--muted);font:500 13px/1 var(--sans);cursor:pointer;transition:color .15s,border-color .15s,background .15s}
+    .share:hover,.share:focus-visible{color:var(--mint);border-color:rgba(30,214,168,.45);background:var(--surface-2)}
+    .share.with-label{width:auto;height:auto;padding:7px 12px;border-radius:999px}
+    .tip{position:absolute;bottom:calc(100% + 8px);right:0;padding:6px 10px;border-radius:8px;background:var(--mint);color:#04201A;font:600 12.5px/1 var(--sans);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s}
+    .tip:empty{display:none}
+    .share[data-state="done"] .tip{opacity:1}
+</style>
+
+<script>
+    const button = $el;
+    const tip = button.querySelector('.tip');
+    let timer;
+
+    const say = (text) => {
+        tip.textContent = text;
+        button.dataset.state = 'done';
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            button.dataset.state = '';
+        }, 1800);
+    };
+
+    const copy = async (url) => {
+        try {
+            await navigator.clipboard.writeText(url);
+            say('লিংক কপি হয়েছে');
+        } catch {
+            window.prompt('লিংক কপি করুন', url);
+        }
+    };
+
+    button.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const { url, title } = button.dataset;
+        const touch = window.matchMedia('(pointer: coarse)').matches;
+        if (touch && navigator.share) {
+            try {
+                await navigator.share({ title, url });
+            } catch (e) {
+                if (e.name !== 'AbortError') await copy(url);
+            }
+            return;
+        }
+        await copy(url);
+    });
+</script>

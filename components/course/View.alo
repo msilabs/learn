@@ -36,7 +36,7 @@
                         <h2 class="lh">সব পাঠ</h2>
                         <ol class="list">
                             <template for="(lesson, i) in lessons">
-                                <li class="rv">
+                                <li class="rv item">
                                     <a class="row" href="/{{ course.id }}/{{ lesson.slug }}/">
                                         <span class="num"><Bn value="{{ String(i + 1).padStart(2, '0') }}" /></span>
                                         <Cover class="thumb" color="{{ course.color }}" icon="{{ course.icon }}" thumb="{{ lesson.thumb }}" seconds="{{ lesson.duration }}" />
@@ -46,6 +46,7 @@
                                         </div>
                                         <span class="go" aria-hidden="true">→</span>
                                     </a>
+                                    <Share.Button class="row-share" url="{{ data.site.canonical }}/{{ course.id }}/{{ lesson.slug }}/" title="{{ lesson.title }}" />
                                 </li>
                             </template>
                         </ol>
@@ -86,6 +87,7 @@
     .list-wrap{padding:64px 0 96px}
     .lh{font-size:24px;font-weight:700;margin-bottom:20px}
     .list{list-style:none;display:grid;gap:14px}
+    .item{position:relative}
     .row{display:grid;grid-template-columns:44px 220px 1fr 32px;gap:24px;align-items:center;padding:12px 20px 12px 16px;border-radius:18px;background:var(--surface);border:1px solid var(--border);text-decoration:none;color:inherit;transition:border-color .2s,background .2s}
     .row:hover{border-color:rgba(30,214,168,.35);background:var(--surface-2)}
     .num{font:600 15px/1 var(--mono);color:var(--dim);text-align:center}
@@ -107,5 +109,16 @@
         .num,.go{display:none}
         .info{padding:0 6px 6px}
         .empty{padding:28px 22px}
+    }
+</style>
+
+<style global>
+    .item .share.row-share{position:absolute;top:12px;right:12px;opacity:0;transition:opacity .15s,color .15s,border-color .15s,background .15s}
+    .item:hover .share.row-share,.item .share.row-share:focus-visible,.item .share.row-share[data-state="done"]{opacity:1}
+    @media (hover:none){
+        .item .share.row-share{opacity:1}
+    }
+    @media (max-width:720px){
+        .item .share.row-share{top:auto;bottom:10px;right:10px}
     }
 </style>

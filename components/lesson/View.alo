@@ -17,6 +17,7 @@
                                 <span class="chip new">পাঠ <Bn value="{{ i + 1 }}" /> / <Bn value="{{ lessons.length }}" /></span>
                                 <span class="chip"><Bn time="{{ props.lesson.duration }}" /> মিনিট</span>
                                 <span class="chip">{{ course.topic }}</span>
+                                <Share.Button label url="{{ data.site.canonical }}/{{ course.id }}/{{ props.lesson.slug }}/" title="{{ props.lesson.title }}" />
                             </div>
                         </div>
                         <div class="rv">
