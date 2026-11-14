@@ -1,0 +1,18 @@
+<!-- ব্রাউজারের ঠিকানার ঘর: বাঁয়ে তিনটা বিন্দু, তারপর icon (যেমন 🔒) আর ঠিকানা। -->
+<template>
+    <div class="cue s-bar {{ props.el.tone }}" style="left:{{ props.el.x ?? 15 }}%;top:{{ props.el.y ?? 38 }}%;width:{{ props.el.w ?? 70 }}%" data-at="{{ props.el.at }}" data-until="{{ props.el.until }}">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="url">
+            <template if="props.el.icon"><b>{{ props.el.icon }}</b></template>
+            {{ props.el.text }}
+        </span>
+    </div>
+</template>
+
+<style>
+    .s-bar{display:flex;align-items:center;gap:1.6cqw;padding:1cqw 1.4cqw;border-radius:1.2cqw;border:.2cqw solid var(--tone,var(--line));background:var(--chip)}
+    .dots{display:flex;gap:.6cqw;flex:none}
+    .dots i{width:1cqw;height:1cqw;border-radius:50%;background:var(--line)}
+    .url{flex:1;display:flex;align-items:center;gap:1cqw;padding:.7cqw 1.4cqw;border-radius:99px;background:var(--stage);font:500 2.2cqw/1.2 var(--mono);color:var(--tone,var(--ink));white-space:nowrap;overflow:hidden}
+    b{font-weight:400}
+</style>
