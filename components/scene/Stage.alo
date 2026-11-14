@@ -11,6 +11,7 @@
             <template else-if="el.type === 'note'"><Scene.Note el="{{ el }}" /></template>
             <template else-if="el.type === 'text'"><Scene.Text el="{{ el }}" /></template>
             <template else-if="el.type === 'cards'"><Scene.Cards el="{{ el }}" /></template>
+            <template else-if="el.type === 'bar'"><Scene.Bar el="{{ el }}" /></template>
         </template>
     </div>
 </template>
