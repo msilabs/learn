@@ -1,0 +1,14 @@
+{
+    "name": "msilabs-learn",
+    "private": true,
+    "engines": {
+        "node": ">=22"
+    },
+    "scripts": {
+        "dev": "alo dev",
+        "build": "alo build"
+    },
+    "devDependencies": {
+        "@msilabs/alo": "^1.2.0"
+    }
+}
