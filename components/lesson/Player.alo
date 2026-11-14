@@ -1,0 +1,315 @@
+<!-- প্লেয়ার: অডিওর সময় দেখে স্টেজের সব [data-at] উপাদান দেখায় আর লুকায়।
+     দৃশ্য আসে <slot />-এ; ক্যাপশন আসে props.lesson.captions থেকে।
+     বাইরের সাথে কথা বলে দুটো event দিয়ে: lesson:time (সময় জানায়) আর lesson:seek (সময়ে যেতে বলে)। -->
+<template>
+    <div class="player idle" data-duration="{{ props.lesson.duration }}" data-key="{{ props.lesson.audio }}">
+        <div class="stage">
+            <slot />
+            <template for="(c, i) in props.lesson.captions">
+                <p class="cap" data-at="{{ c.t }}" data-until="{{ props.lesson.captions[i + 1]?.t }}">{{ c.text }}</p>
+            </template>
+            <button class="big" type="button" aria-label="চালু করুন">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
+            </button>
+        </div>
+
+        <audio src="{{ props.lesson.audio }}" preload="none"></audio>
+
+        <div class="bar">
+            <input class="seek" type="range" min="0" max="{{ props.lesson.duration }}" step="0.1" value="0" aria-label="সময়">
+            <div class="controls">
+                <button class="ctl play" type="button" aria-label="চালু করুন">
+                    <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
+                    <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>
+                    <svg class="i-again" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/></svg>
+                </button>
+                <button class="ctl back" type="button" aria-label="৫ সেকেন্ড পিছনে">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 7 6 12l5 5M18 7l-5 5 5 5"/></svg>
+                </button>
+                <span class="time">0:00 / 0:00</span>
+                <span class="grow"></span>
+                <button class="ctl txt cc on" type="button" aria-pressed="true" aria-label="ক্যাপশন">CC</button>
+                <select class="ctl rate" aria-label="গতি">
+                    <option value="0.75">0.75x</option>
+                    <option value="1" selected>1x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2">2x</option>
+                </select>
+                <button class="ctl theme" type="button" aria-label="স্টেজের থিম বদলান">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor"/></svg>
+                </button>
+                <button class="ctl fs" type="button" aria-label="পূর্ণ পর্দা">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style>
+    .player{
+        --stage:#0E1729; --ink:#EEF2FA; --muted:#9AA8C4; --line:#2B3E60;
+        --accent:#8A90FF; --danger:#FF7B6B; --ok:#1ED6A8; --chip:#16223A;
+        position:relative;border-radius:18px;overflow:hidden;background:var(--stage);color:var(--ink);
+        border:1px solid var(--border-2);
+        box-shadow:0 40px 100px -40px rgba(30,214,168,.35),0 30px 60px -30px rgba(0,0,0,.8);
+    }
+    .player.light{
+        --stage:#FFFFFF; --ink:#14213D; --muted:#5B6782; --line:#D5DCE8;
+        --accent:#4F46E5; --danger:#D93F2B; --ok:#0B7F6E; --chip:#F2F5FA;
+    }
+    .stage{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:var(--stage);container-type:inline-size;cursor:pointer;transition:background .3s}
+
+    .cap{position:absolute;left:5%;right:5%;bottom:4%;text-align:center;font-size:max(11px,2.05cqw);font-weight:500;line-height:1.5;padding:.7cqw 1.2cqw;border-radius:.8cqw;background:color-mix(in srgb,var(--chip) 92%,transparent);opacity:0;pointer-events:none;transition:opacity .25s}
+    .cap.on{opacity:1;pointer-events:auto}
+    .stage.nocap .cap{display:none}
+
+    .big{position:absolute;left:50%;top:50%;translate:-50% -50%;width:clamp(56px,11cqw,96px);height:clamp(56px,11cqw,96px);border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;color:#04201A;background:linear-gradient(135deg,var(--mint),var(--mint-2));box-shadow:0 0 0 10px rgba(30,214,168,.15),0 20px 50px -10px rgba(30,214,168,.6);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:5}
+    .big svg{width:42%;height:42%;margin-left:6%}
+    .idle .big{opacity:1;pointer-events:auto}
+    .stage::after{content:"";position:absolute;inset:0;z-index:4;background:radial-gradient(circle at 50% 50%,rgba(5,9,18,.55),rgba(5,9,18,.2));opacity:0;pointer-events:none;transition:opacity .25s}
+    .idle .stage::after{opacity:1}
+    .big:hover{transform:scale(1.05)}
+
+    .bar{background:color-mix(in srgb,var(--stage) 80%,#000);border-top:1px solid var(--line);padding:0 14px 10px}
+    .seek{--p:0%;display:block;width:100%;height:18px;margin:0;background:transparent;-webkit-appearance:none;appearance:none;cursor:pointer}
+    .seek::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--mint) var(--p),var(--line) var(--p))}
+    .seek::-moz-range-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--mint) var(--p),var(--line) var(--p))}
+    .seek::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;margin-top:-5px;border-radius:50%;background:#fff;border:0;box-shadow:0 0 0 4px rgba(30,214,168,.3)}
+    .seek::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#fff;border:0;box-shadow:0 0 0 4px rgba(30,214,168,.3)}
+
+    .controls{display:flex;align-items:center;gap:6px}
+    .ctl{height:36px;min-width:36px;display:inline-grid;place-items:center;padding:0 8px;border-radius:9px;border:0;background:transparent;color:var(--ink);cursor:pointer;font:600 13px/1 var(--sans);transition:background .15s}
+    .ctl:hover{background:color-mix(in srgb,var(--ink) 10%,transparent)}
+    .ctl svg{width:20px;height:20px}
+    .play svg{display:none}
+    .play[data-state="play"] .i-play,.play[data-state="pause"] .i-pause,.play[data-state="again"] .i-again{display:block}
+    .txt{opacity:.55;border:1px solid var(--line);height:28px;padding:0 7px;border-radius:6px}
+    .txt.on{opacity:1}
+    .rate{appearance:none;-webkit-appearance:none;text-align:center;border:1px solid var(--line);height:28px;padding:0 8px;border-radius:6px;background:transparent}
+    .rate option{background:var(--stage);color:var(--ink)}
+    .time{font:500 13px/1 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;margin-left:4px}
+    .grow{flex:1}
+
+    .player:fullscreen{display:flex;flex-direction:column;justify-content:center;background:#000;border-radius:0;border:0}
+    .player:fullscreen .stage{width:min(100vw,calc((100vh - 70px) * 16 / 9));margin:0 auto}
+    .player:fullscreen .bar{width:100%}
+
+    @media (max-width:560px){
+        .back,.theme{display:none}
+        .bar{padding:0 8px 8px}
+    }
+</style>
+
+<script>
+    const audio = $el.querySelector('audio');
+    const stage = $el.querySelector('.stage');
+    const playBtn = $el.querySelector('.play');
+    const seek = $el.querySelector('.seek');
+    const timeEl = $el.querySelector('.time');
+    const ccBtn = $el.querySelector('.cc');
+    const storeKey = 'learn:pos:' + $el.dataset.key;
+    let duration = Number($el.dataset.duration);
+
+    const cues = [...stage.querySelectorAll('[data-at]')].map((el) => ({
+        el,
+        at: Number(el.dataset.at),
+        until: el.dataset.until ? Number(el.dataset.until) : Infinity,
+    }));
+
+    function readStore(key) {
+        try {
+            return localStorage.getItem(key);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function writeStore(key, value) {
+        try {
+            localStorage.setItem(key, value);
+        } catch (e) {}
+    }
+
+    // অডিও না চললে একটা ভার্চুয়াল ঘড়ি দিয়ে অ্যানিমেশন চলে
+    let useAudio = true;
+    const fallback = { time: 0, playing: false, rate: 1 };
+    audio.addEventListener('error', () => {
+        useAudio = false;
+    });
+
+    let restored = false;
+    audio.addEventListener('loadedmetadata', () => {
+        if (isFinite(audio.duration)) {
+            duration = audio.duration;
+            seek.max = duration;
+        }
+        if (!restored && audio.src.startsWith('blob:')) {
+            restored = true;
+            const saved = Number(readStore(storeKey));
+            if (saved > 3 && saved < duration - 3) audio.currentTime = saved;
+        }
+    });
+
+    // পুরো অডিও একবারে নামিয়ে blob বানানো হয়, যাতে Range সমর্থন না করা সার্ভারেও টেনে আগে-পিছে করা যায়
+    fetch(audio.src)
+        .then((res) => (res.ok ? res.blob() : Promise.reject(res.status)))
+        .then((blob) => {
+            audio.src = URL.createObjectURL(new Blob([blob], { type: 'audio/mpeg' }));
+        })
+        .catch(() => {
+            audio.preload = 'auto';
+            audio.load();
+        });
+
+    const clock = {
+        get time() {
+            return useAudio ? audio.currentTime : fallback.time;
+        },
+        set time(v) {
+            v = Math.max(0, Math.min(duration, v));
+            if (useAudio) audio.currentTime = v;
+            else fallback.time = v;
+        },
+        get playing() {
+            return useAudio ? !audio.paused && !audio.ended : fallback.playing;
+        },
+        get ended() {
+            return useAudio ? audio.ended : fallback.time >= duration;
+        },
+    };
+
+    const fmt = (s) => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+
+    let seeking = false;
+    let lastSent = -1;
+    let lastSaved = 0;
+    function render() {
+        const t = clock.time;
+        for (const c of cues) c.el.classList.toggle('on', t >= c.at && t < c.until);
+        if (!seeking) seek.value = t;
+        seek.style.setProperty('--p', (duration ? (t / duration) * 100 : 0) + '%');
+        timeEl.textContent = fmt(t) + ' / ' + fmt(duration);
+        const state = clock.playing ? 'pause' : clock.ended ? 'again' : 'play';
+        if (playBtn.dataset.state !== state) {
+            playBtn.dataset.state = state;
+            playBtn.setAttribute('aria-label', state === 'pause' ? 'থামান' : state === 'again' ? 'আবার চালান' : 'চালু করুন');
+        }
+        if (Math.abs(t - lastSent) >= 0.25) {
+            lastSent = t;
+            document.dispatchEvent(new CustomEvent('lesson:time', { detail: t }));
+        }
+        if (clock.playing && Math.abs(t - lastSaved) > 2) {
+            lastSaved = t;
+            writeStore(storeKey, clock.ended ? 0 : t.toFixed(1));
+        }
+    }
+
+    let last = performance.now();
+    function frame(now) {
+        if (!useAudio && fallback.playing) {
+            fallback.time += ((now - last) / 1000) * fallback.rate;
+            if (fallback.time >= duration) {
+                fallback.time = duration;
+                fallback.playing = false;
+            }
+        }
+        last = now;
+        render();
+        requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+
+    function play() {
+        $el.classList.remove('idle');
+        if (!useAudio) {
+            if (fallback.time >= duration) fallback.time = 0;
+            fallback.playing = true;
+            return;
+        }
+        if (audio.ended) audio.currentTime = 0;
+        audio.play().catch(() => {});
+    }
+
+    function pause() {
+        if (!useAudio) fallback.playing = false;
+        else audio.pause();
+        writeStore(storeKey, clock.time.toFixed(1));
+    }
+
+    function toggle() {
+        if (clock.playing) pause();
+        else play();
+    }
+
+    audio.addEventListener('ended', () => writeStore(storeKey, 0));
+
+    playBtn.addEventListener('click', toggle);
+    $el.querySelector('.big').addEventListener('click', (e) => {
+        e.stopPropagation();
+        play();
+    });
+    stage.addEventListener('click', () => {
+        if (String(getSelection())) return; // লেখা সিলেক্ট করার সময় যেন থেমে না যায়
+        toggle();
+    });
+    $el.querySelector('.back').addEventListener('click', () => {
+        clock.time = clock.time - 5;
+    });
+    seek.addEventListener('input', () => {
+        seeking = true;
+        clock.time = Number(seek.value);
+    });
+    seek.addEventListener('change', () => {
+        seeking = false;
+    });
+    $el.querySelector('.rate').addEventListener('change', (e) => {
+        audio.playbackRate = Number(e.target.value);
+        fallback.rate = Number(e.target.value);
+    });
+
+    function toggleCaptions() {
+        const on = !ccBtn.classList.contains('on');
+        ccBtn.classList.toggle('on', on);
+        ccBtn.setAttribute('aria-pressed', String(on));
+        stage.classList.toggle('nocap', !on);
+    }
+    ccBtn.addEventListener('click', toggleCaptions);
+
+    if (readStore('learn:stage') === 'light') $el.classList.add('light');
+    $el.querySelector('.theme').addEventListener('click', () => {
+        const light = $el.classList.toggle('light');
+        writeStore('learn:stage', light ? 'light' : 'dark');
+    });
+
+    function toggleFullscreen() {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else if ($el.requestFullscreen) $el.requestFullscreen().catch(() => {});
+    }
+    $el.querySelector('.fs').addEventListener('click', toggleFullscreen);
+
+    document.addEventListener('lesson:seek', (e) => {
+        clock.time = Number(e.detail);
+        play();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON'].includes(e.target.tagName) || e.metaKey || e.ctrlKey || e.altKey) return;
+        const key = e.key.toLowerCase();
+        if (key === ' ' || key === 'k') {
+            e.preventDefault();
+            toggle();
+        } else if (key === 'arrowleft') {
+            e.preventDefault();
+            clock.time = clock.time - 5;
+        } else if (key === 'arrowright') {
+            e.preventDefault();
+            clock.time = clock.time + 5;
+        } else if (key === 'f') {
+            toggleFullscreen();
+        } else if (key === 'c') {
+            toggleCaptions();
+        }
+    });
+</script>

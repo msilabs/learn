@@ -1,0 +1,15 @@
+<template>
+    <div
+        class="cue s-line {{ props.el.tone }} {{ props.el.h ? 'v' : 'h' }} {{ props.el.dashed ? 'dashed' : '' }}"
+        style="left:{{ props.el.x }}%;top:{{ props.el.y }}%;{{ props.el.h ? 'height:' + props.el.h + '%' : 'width:' + props.el.w + '%' }}"
+        data-at="{{ props.el.at }}"
+        data-until="{{ props.el.until }}"
+    ></div>
+</template>
+
+<style>
+    .s-line.h{height:.3cqw;background:var(--tone,var(--ink))}
+    .s-line.v{width:0;border-left:.3cqw solid var(--tone,var(--ink))}
+    .s-line.h.dashed{height:0;background:none;border-top:.3cqw dashed var(--tone,var(--ink))}
+    .s-line.v.dashed{border-left-style:dashed}
+</style>

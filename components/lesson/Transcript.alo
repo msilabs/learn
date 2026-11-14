@@ -1,0 +1,47 @@
+<!-- স্ক্রিপ্ট: ক্যাপশনের একই তালিকা থেকে তৈরি। লাইনে ক্লিক করলে প্লেয়ার সেই সময়ে যায়। -->
+<template>
+    <ol class="transcript">
+        <template for="c in props.captions">
+            <li>
+                <button type="button" data-t="{{ c.t }}">
+                    <span class="t"><Bn time="{{ c.t }}" /></span>
+                    <span class="x">{{ c.text }}</span>
+                </button>
+            </li>
+        </template>
+    </ol>
+</template>
+
+<style>
+    .transcript{position:relative;list-style:none;display:grid;gap:4px;max-height:520px;overflow:auto;padding-right:6px;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}
+    button{width:100%;display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:baseline;text-align:left;padding:12px 14px;border-radius:12px;border:1px solid transparent;background:transparent;color:var(--muted);font:inherit;font-size:16px;line-height:1.7;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+    button:hover{background:var(--surface);color:var(--text)}
+    button.active{background:rgba(30,214,168,.08);border-color:rgba(30,214,168,.25);color:var(--text)}
+    .t{font:500 13px/1.9 var(--mono);color:var(--dim)}
+    button.active .t{color:var(--mint)}
+</style>
+
+<script>
+    const lines = [...$el.querySelectorAll('button')];
+    const times = lines.map((b) => Number(b.dataset.t));
+    let current = -1;
+
+    lines.forEach((b) => {
+        b.addEventListener('click', () => {
+            document.dispatchEvent(new CustomEvent('lesson:seek', { detail: Number(b.dataset.t) }));
+        });
+    });
+
+    document.addEventListener('lesson:time', (e) => {
+        let index = -1;
+        for (let i = 0; i < times.length; i++) if (times[i] <= e.detail) index = i;
+        if (index === current) return;
+        if (current >= 0) lines[current].classList.remove('active');
+        current = index;
+        if (current < 0) return;
+        const line = lines[current];
+        line.classList.add('active');
+        const top = line.offsetTop - $el.clientHeight / 3;
+        $el.scrollTo({ top, behavior: 'smooth' });
+    });
+</script>

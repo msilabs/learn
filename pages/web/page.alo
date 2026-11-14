@@ -1,0 +1,9 @@
+<head>
+    <title>{{ data.courses.find((c) => c.id === route.path.split('/')[1]).title }} | msilabs শিখুন</title>
+    <meta name="description" content="{{ data.courses.find((c) => c.id === route.path.split('/')[1]).description }}">
+    <link rel="canonical" href="{{ data.site.canonical }}{{ route.path }}">
+</head>
+
+<template>
+    <Course.View />
+</template>

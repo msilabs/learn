@@ -1,0 +1,29 @@
+<!-- দৃশ্য: data-র scene তালিকা থেকে প্রতিটা উপাদান তার type অনুযায়ী আঁকা হয়।
+     প্রতিটা উপাদানের at = কখন আসবে, until = কখন যাবে (অডিওর সেকেন্ডে)। x, y, w, h স্টেজের % হিসাবে। -->
+<template>
+    <div class="scene">
+        <template for="el in props.items">
+            <template if="el.type === 'title'"><Scene.Title el="{{ el }}" /></template>
+            <template else-if="el.type === 'label'"><Scene.Label el="{{ el }}" /></template>
+            <template else-if="el.type === 'box'"><Scene.Box el="{{ el }}" /></template>
+            <template else-if="el.type === 'line'"><Scene.Line el="{{ el }}" /></template>
+            <template else-if="el.type === 'packet'"><Scene.Packet el="{{ el }}" /></template>
+            <template else-if="el.type === 'note'"><Scene.Note el="{{ el }}" /></template>
+            <template else-if="el.type === 'text'"><Scene.Text el="{{ el }}" /></template>
+            <template else-if="el.type === 'cards'"><Scene.Cards el="{{ el }}" /></template>
+        </template>
+    </div>
+</template>
+
+<style>
+    .scene{position:absolute;inset:0}
+</style>
+
+<style global>
+    .scene > *{position:absolute}
+    .scene .cue{opacity:0;transform:translateY(1.2cqw);transition:opacity .45s,transform .45s;pointer-events:none}
+    .scene .cue.on{opacity:1;transform:none;pointer-events:auto}
+    .scene .danger{--tone:var(--danger)}
+    .scene .ok{--tone:var(--ok)}
+    .scene .accent{--tone:var(--accent)}
+</style>

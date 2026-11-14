@@ -1,0 +1,15 @@
+<!-- প্যাকেট: from থেকে to-তে চলে যায় (স্টেজের বাঁ দিক থেকে %)। travel = যেতে কত সেকেন্ড লাগে। -->
+<template>
+    <div
+        class="s-packet {{ props.el.tone }} {{ props.el.mono ? 'mono' : '' }}"
+        style="--from:{{ props.el.from }}%;--to:{{ props.el.to }}%;--travel:{{ props.el.travel ?? 2.6 }}s;top:{{ props.el.y }}%;width:{{ props.el.w ?? 20 }}%"
+        data-at="{{ props.el.at }}"
+        data-until="{{ props.el.until }}"
+    >{{ props.el.text }}</div>
+</template>
+
+<style>
+    .s-packet{left:var(--from);text-align:center;opacity:0;font-size:1.7cqw;font-weight:600;padding:.7cqw .5cqw;border-radius:.8cqw;background:var(--chip);border:.2cqw solid var(--tone,var(--accent));color:var(--ink);transition:opacity .3s,left 0s .3s;pointer-events:none}
+    .s-packet.on{opacity:1;left:var(--to);transition:opacity .3s,left var(--travel) ease-in-out .2s}
+    .s-packet.mono{font-family:var(--mono)}
+</style>

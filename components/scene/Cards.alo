@@ -1,0 +1,17 @@
+<template>
+    <div class="s-cards">
+        <template for="c in props.el.items">
+            <div class="cue s-card" data-at="{{ c.at }}" data-until="{{ c.until }}">
+                <i>{{ c.icon }}</i><b>{{ c.title }}</b><span>{{ c.text }}</span>
+            </div>
+        </template>
+    </div>
+</template>
+
+<style>
+    .s-cards{inset:20% 5% 22%;display:flex;gap:2.4cqw;align-items:stretch;pointer-events:none}
+    .s-card{flex:1;padding:2cqw 1.6cqw;border-radius:1.2cqw;text-align:center;border:.2cqw solid var(--line);background:var(--chip)}
+    i{display:block;font-style:normal;font-size:4.6cqw}
+    b{display:block;font-size:2.3cqw;margin:.4cqw 0}
+    span{font-size:1.65cqw;color:var(--muted)}
+</style>

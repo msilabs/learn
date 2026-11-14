@@ -1,0 +1,12 @@
+<template>
+    <div class="cue s-note {{ props.el.tone }} {{ props.el.mono ? 'mono' : '' }} {{ props.el.title ? '' : 'plain' }}" style="left:{{ props.el.x }}%;top:{{ props.el.y }}%;width:{{ props.el.w ?? 30 }}%" data-at="{{ props.el.at }}" data-until="{{ props.el.until }}">
+        <template if="props.el.title"><b>{{ props.el.title }}</b><br></template>{{ props.el.text }}
+    </div>
+</template>
+
+<style>
+    .s-note{font-size:1.65cqw;padding:.8cqw 1.2cqw;border-radius:1cqw;border:.2cqw solid var(--tone,var(--line));background:var(--stage);color:var(--ink)}
+    .s-note b{color:var(--tone,var(--ink))}
+    .s-note.plain{color:var(--tone,var(--ink))}
+    .s-note.mono{font-family:var(--mono)}
+</style>
