@@ -5,7 +5,7 @@
   --text:#E9EEF8; --muted:#97A3BD; --dim:#66728C;
   --mint:#1ED6A8; --mint-2:#5EEAD4; --sun:#FFB020; --indigo:#7C83FF; --coral:#FF7A5C;
   --navy:#14213D;
-  --sans:'Inter','Hind Siliguri','Noto Sans Bengali',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --sans:'Inter','Noto Sans Bengali',system-ui,-apple-system,'Segoe UI',sans-serif;
   --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   --wrap:1180px;
   --radius:20px;
