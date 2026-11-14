@@ -1,0 +1,22 @@
+<head>
+    <title>পাতাটি পাওয়া যায়নি | msilabs শিখুন</title>
+    <meta name="robots" content="noindex">
+</head>
+
+<template>
+    <section class="nf">
+        <div class="wrap">
+            <span class="code">৪০৪</span>
+            <h1>এই পাতাটি পাওয়া যায়নি।</h1>
+            <p>লিংকটা হয়তো বদলে গেছে, অথবা পাঠটা এখনও তৈরি হয়নি।</p>
+            <a class="btn btn-primary" href="/">সব পাঠ দেখুন</a>
+        </div>
+    </section>
+</template>
+
+<style>
+    .nf{padding:120px 0;text-align:center}
+    .code{font:700 clamp(72px,14vw,140px)/1 var(--sans);background:linear-gradient(120deg,var(--mint),var(--indigo));-webkit-background-clip:text;background-clip:text;color:transparent}
+    h1{font-size:clamp(26px,4vw,36px);font-weight:700;margin:16px 0 8px}
+    p{color:var(--muted);margin-bottom:28px}
+</style>

@@ -1,0 +1,7 @@
+<template>
+    <div class="cue s-text {{ props.el.tone }}" style="left:{{ props.el.x }}%;top:{{ props.el.y }}%;width:{{ props.el.w ?? 18 }}%;text-align:{{ props.el.align ?? 'center' }}" data-at="{{ props.el.at }}" data-until="{{ props.el.until }}">{{ props.el.text }}</div>
+</template>
+
+<style>
+    .s-text{font-size:1.9cqw;font-weight:700;color:var(--tone,var(--ink))}
+</style>

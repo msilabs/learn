@@ -1,0 +1,48 @@
+<!-- thumbnail: ডেটা থেকে বানানো gradient cover। thumb দিলে ছবি দেখায়।
+     নিচের লেবেল: seconds (সময়), count + unit (যেমন ৩টা পাঠ), অথবা meta (যেকোনো লেখা)। -->
+<template>
+    <div class="cover {{ props.color ?? 'mint' }} {{ props.class }}">
+        <template if="props.thumb">
+            <img src="{{ props.thumb }}" alt="" loading="lazy">
+        </template>
+        <template else>
+            <span class="glow" aria-hidden="true"></span>
+            <span class="icon" aria-hidden="true">{{ props.icon }}</span>
+        </template>
+        <template if="props.soon">
+            <span class="badge">শীঘ্রই</span>
+        </template>
+        <template else-if="props.open">
+            <span class="btn-c" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16 16 8M9 8h7v7"/></svg></span>
+        </template>
+        <template else>
+            <span class="btn-c" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span>
+        </template>
+        <template if="props.seconds">
+            <span class="label"><Bn time="{{ props.seconds }}" /></span>
+        </template>
+        <template else-if="props.count">
+            <span class="label"><Bn value="{{ props.count }}" />টা {{ props.unit }}</span>
+        </template>
+        <template else-if="props.meta">
+            <span class="label">{{ props.meta }}</span>
+        </template>
+    </div>
+</template>
+
+<style>
+    .cover{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;display:grid;place-items:center;isolation:isolate;container-type:inline-size;background:linear-gradient(140deg,#0B1324 0%,var(--c) 140%)}
+    .cover.mint{--c:#0FB58E}
+    .cover.coral{--c:#E2553A}
+    .cover.sun{--c:#E39A12}
+    .cover.indigo{--c:#5B5FEF}
+    .cover::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:22px 22px;mask-image:radial-gradient(circle at 60% 40%,#000,transparent 75%);-webkit-mask-image:radial-gradient(circle at 60% 40%,#000,transparent 75%)}
+    .cover::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);pointer-events:none}
+    .glow{position:absolute;width:60%;aspect-ratio:1;border-radius:50%;background:var(--c);filter:blur(40px);opacity:.45;z-index:-1}
+    .cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1}
+    .icon{font-size:clamp(30px,22cqw,84px);line-height:1;filter:drop-shadow(0 10px 24px rgba(0,0,0,.45))}
+    .btn-c{position:absolute;left:12px;bottom:12px;width:clamp(30px,12cqw,46px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff}
+    .btn-c svg{width:46%;height:46%}
+    .badge{position:absolute;left:12px;bottom:12px;font-size:13px;font-weight:600;padding:5px 12px;border-radius:999px;background:var(--sun);color:#1A1200}
+    .label{position:absolute;right:12px;bottom:12px;font:600 12.5px/1 var(--mono);padding:7px 9px;border-radius:8px;background:rgba(5,9,18,.7);border:1px solid rgba(255,255,255,.1);color:#fff;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+</style>

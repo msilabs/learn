@@ -1,0 +1,39 @@
+<template>
+    <header class="top">
+        <div class="wrap">
+            <a class="brand" href="/" aria-label="msilabs শিখুন, প্রথম পাতা">
+                <img src="/logo.png" width="34" height="34" alt="">
+                <span class="wm">msi<b>labs</b></span>
+                <span class="sep" aria-hidden="true"></span>
+                <span class="sub">শিখুন</span>
+            </a>
+            <nav class="links" aria-label="প্রধান">
+                <a href="/#courses">Course</a>
+                <a href="/#interactive">Interactive</a>
+                <a class="ext" href="{{ data.site.links.home }}">msilabs ↗</a>
+            </nav>
+        </div>
+    </header>
+</template>
+
+<style>
+    .top{position:sticky;top:0;z-index:50;background:rgba(7,12,24,.72);backdrop-filter:saturate(1.5) blur(14px);-webkit-backdrop-filter:saturate(1.5) blur(14px);border-bottom:1px solid var(--border)}
+    .top .wrap{display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px}
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+    .brand img{width:34px;height:34px;border-radius:9px}
+    .wm{font:800 20px/1 'Inter',sans-serif;letter-spacing:-.02em}
+    .wm b{color:var(--mint);font-weight:800}
+    .sep{width:1px;height:20px;background:var(--border-2)}
+    .sub{font-weight:600;font-size:17px;color:var(--muted)}
+    .links{display:flex;align-items:center;gap:26px}
+    .links a{color:var(--muted);text-decoration:none;font-size:15px;font-weight:500;transition:color .15s}
+    .links a:hover{color:var(--text)}
+    .links .ext{padding:8px 14px;border:1px solid var(--border-2);border-radius:10px;color:var(--text)}
+    .links .ext:hover{border-color:rgba(255,255,255,.3)}
+
+    @media (max-width:640px){
+        .links{gap:14px}
+        .links a:not(.ext){display:none}
+        .sep,.sub{display:none}
+    }
+</style>

@@ -1,0 +1,116 @@
+<!-- পাঠের পুরো পেইজ। course আসে URL থেকে (/web/https/ → web), পাঠ আসে props.lesson থেকে।
+     দৃশ্য আঁকে <Scene.Stage>, তাই নতুন পাঠে শুধু JSON আর অডিও লাগে। -->
+<template>
+    <template for="course in data.courses.filter((c) => c.id === route.path.split('/')[1])">
+        <template for="lessons in [(data[course.id] ?? []).toSorted((a, b) => a.order - b.order)]">
+            <template for="i in [lessons.findIndex((l) => l.slug === props.lesson.slug)]">
+                <section class="cinema">
+                    <div class="wrap">
+                        <nav class="crumbs" aria-label="Breadcrumb">
+                            <a href="/">শিখুন</a><span aria-hidden="true">/</span>
+                            <a href="/{{ course.id }}/">{{ course.title }}</a><span aria-hidden="true">/</span>
+                            <span aria-current="page">পাঠ <Bn value="{{ i + 1 }}" /></span>
+                        </nav>
+                        <div class="head rv">
+                            <h1>{{ props.lesson.title }}</h1>
+                            <div class="meta">
+                                <span class="chip new">পাঠ <Bn value="{{ i + 1 }}" /> / <Bn value="{{ lessons.length }}" /></span>
+                                <span class="chip"><Bn time="{{ props.lesson.duration }}" /> মিনিট</span>
+                                <span class="chip">{{ course.topic }}</span>
+                            </div>
+                        </div>
+                        <div class="rv">
+                            <Lesson.Player lesson="{{ props.lesson }}">
+                                <Scene.Stage items="{{ props.lesson.scene }}" />
+                            </Lesson.Player>
+                        </div>
+                        <p class="keys"><kbd>Space</kbd> চালু/থামান <kbd>←</kbd><kbd>→</kbd> ৫ সেকেন্ড <kbd>C</kbd> ক্যাপশন <kbd>F</kbd> পূর্ণ পর্দা · পর্দার লেখা সিলেক্ট করে কপিও করা যায়</p>
+                    </div>
+                </section>
+
+                <section class="below">
+                    <div class="wrap cols">
+                        <div>
+                            <h2>এই পাঠে</h2>
+                            <p class="desc">{{ props.lesson.description }}</p>
+                            <h3 class="sh">স্ক্রিপ্ট <span>লাইনে ক্লিক করলে সেই জায়গা থেকে চলবে</span></h3>
+                            <Lesson.Transcript captions="{{ props.lesson.captions }}" />
+                        </div>
+                        <aside>
+                            <div class="panel">
+                                <span class="eyebrow">Course</span>
+                                <a class="ct" href="/{{ course.id }}/">{{ course.title }}</a>
+                                <ol class="toc">
+                                    <template for="(l, j) in lessons">
+                                        <li>
+                                            <a class="{{ j === i ? 'cur' : null }}" href="/{{ course.id }}/{{ l.slug }}/" aria-current="{{ j === i ? 'page' : null }}">
+                                                <span class="n"><Bn value="{{ j + 1 }}" /></span>
+                                                <span class="tt">{{ l.title }}</span>
+                                                <span class="d"><Bn time="{{ l.duration }}" /></span>
+                                            </a>
+                                        </li>
+                                    </template>
+                                </ol>
+                            </div>
+                            <nav class="pager" aria-label="পাঠ">
+                                <template if="i > 0">
+                                    <a href="/{{ course.id }}/{{ lessons[i - 1].slug }}/"><span>← আগের পাঠ</span><b>{{ lessons[i - 1].title }}</b></a>
+                                </template>
+                                <template if="i < lessons.length - 1">
+                                    <a class="next" href="/{{ course.id }}/{{ lessons[i + 1].slug }}/"><span>পরের পাঠ →</span><b>{{ lessons[i + 1].title }}</b></a>
+                                </template>
+                                <template else>
+                                    <a class="next" href="/#courses"><span>আরও শিখুন →</span><b>সব course আর simulator</b></a>
+                                </template>
+                            </nav>
+                        </aside>
+                    </div>
+                </section>
+            </template>
+        </template>
+    </template>
+</template>
+
+<style>
+    .cinema{position:relative;padding:32px 0 48px;background:radial-gradient(900px 420px at 50% 0%,rgba(30,214,168,.12),transparent 70%),var(--bg)}
+    .cinema .wrap{max-width:1120px}
+    .crumbs{display:flex;flex-wrap:wrap;gap:8px;font-size:14.5px;color:var(--dim);margin-bottom:22px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--mint)}
+    .head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 24px;margin-bottom:24px}
+    h1{font-size:clamp(28px,4.2vw,44px);line-height:1.2;font-weight:700;letter-spacing:-.01em}
+    .meta{display:flex;flex-wrap:wrap;gap:8px}
+    .keys{margin-top:16px;font-size:14px;color:var(--dim);display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+    kbd{font:500 12px/1 var(--mono);padding:4px 7px;border-radius:6px;border:1px solid var(--border-2);background:var(--surface);color:var(--muted);margin-left:6px}
+    kbd:first-child{margin-left:0}
+    .below{padding:56px 0 96px;border-top:1px solid var(--border);background:var(--bg-2)}
+    .cols{display:grid;grid-template-columns:1fr 360px;gap:48px;align-items:start;max-width:1120px}
+    h2{font-size:26px;font-weight:700}
+    .desc{color:var(--muted);margin:8px 0 32px;font-size:17px}
+    .sh{font-size:18px;font-weight:700;margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+    .sh span{font-size:14px;font-weight:400;color:var(--dim)}
+    aside{position:sticky;top:90px;display:grid;gap:16px}
+    .panel{padding:22px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border)}
+    .ct{display:block;margin:10px 0 14px;font-size:19px;font-weight:700;color:var(--text);text-decoration:none}
+    .ct:hover{color:var(--mint)}
+    .toc{list-style:none;display:grid;gap:4px}
+    .toc a{display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;color:var(--muted);text-decoration:none;font-size:15px}
+    .toc a:hover{background:var(--surface-2);color:var(--text)}
+    .toc a.cur{background:rgba(30,214,168,.1);color:var(--text)}
+    .toc .n{font:600 13px/1 var(--mono);color:var(--dim)}
+    .toc a.cur .n{color:var(--mint)}
+    .toc .d{font:500 12.5px/1 var(--mono);color:var(--dim)}
+    .pager{display:grid;gap:12px}
+    .pager a{display:flex;flex-direction:column;gap:4px;padding:16px 18px;border-radius:16px;background:var(--surface);border:1px solid var(--border);text-decoration:none;color:var(--text)}
+    .pager a:hover{border-color:rgba(30,214,168,.35)}
+    .pager span{font-size:13.5px;color:var(--mint);font-weight:600}
+    .pager b{font-size:16px;font-weight:600}
+
+    @media (max-width:960px){
+        .cols{grid-template-columns:1fr}
+        aside{position:static}
+    }
+    @media (max-width:560px){
+        .keys{display:none}
+    }
+</style>

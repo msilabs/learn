@@ -1,5 +1,14 @@
 {
-    "name": "আমার সাইট",
+    "name": "msilabs শিখুন",
+    "title": "msilabs শিখুন · বাংলায় দেখে, শুনে আর হাতে-কলমে শিখুন",
+    "description": "বাংলায় ছোট ছোট animated পাঠ আর interactive simulator। প্রতিটা পাঠ সাধারণ HTML, ভিডিও নয়: লেখা সিলেক্ট করা যায়, গতি বদলানো যায়, পুরো স্ক্রিপ্ট সাথেই থাকে।",
     "lang": "bn",
-    "url": "https://example.com"
+    "url": "https://msilabs.github.io",
+    "canonical": "https://msilabs.github.io/learn",
+    "links": {
+        "home": "https://msilabs.github.io/",
+        "github": "https://github.com/msilabs/learn",
+        "org": "https://github.com/msilabs",
+        "linkedin": "https://www.linkedin.com/company/msilabs"
+    }
 }

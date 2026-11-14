@@ -1,0 +1,14 @@
+<head>
+    <title>{{ item.title }} | msilabs শিখুন</title>
+    <meta name="description" content="{{ item.description }}">
+    <link rel="canonical" href="{{ data.site.canonical }}{{ route.path }}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ data.site.canonical }}{{ route.path }}">
+    <meta property="og:title" content="{{ item.title }} | msilabs শিখুন">
+    <meta property="og:description" content="{{ item.description }}">
+    <meta property="og:locale" content="bn_BD">
+</head>
+
+<template>
+    <Lesson.View lesson="{{ item }}" />
+</template>

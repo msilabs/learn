@@ -1,0 +1,4 @@
+<!-- সংখ্যা বাংলায়: value="{{ 3 }}" → ৩, time="{{ 64.9 }}" → ১:০৫ -->
+<template>
+    <span>{{ (props.time != null ? [Math.floor(props.time)].map((s) => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'))[0] : String(props.value)).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]) }}</span>
+</template>

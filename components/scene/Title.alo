@@ -1,0 +1,12 @@
+<template>
+    <div class="cue s-title" data-at="{{ props.el.at }}" data-until="{{ props.el.until }}">
+        <b>{{ props.el.text }}</b>
+        <template if="props.el.sub"><span>{{ props.el.sub }}</span></template>
+    </div>
+</template>
+
+<style>
+    .s-title{inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 6%}
+    b{font-size:6cqw;line-height:1.25;font-weight:700}
+    span{font-size:2.4cqw;color:var(--muted);margin-top:1cqw}
+</style>

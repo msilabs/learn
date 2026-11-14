@@ -1,0 +1,111 @@
+<!-- course পেইজের পুরো ভিউ। course-এর id আসে URL থেকে (/web/ → web)। -->
+<template>
+    <template for="course in data.courses.filter((c) => c.id === route.path.split('/')[1])">
+        <template for="lessons in [(data[course.id] ?? []).toSorted((a, b) => a.order - b.order)]">
+            <section class="hero {{ course.color }}">
+                <div class="wrap">
+                    <nav class="crumbs" aria-label="Breadcrumb">
+                        <a href="/">শিখুন</a><span aria-hidden="true">/</span><span aria-current="page">{{ course.title }}</span>
+                    </nav>
+                    <div class="grid">
+                        <div class="rv">
+                            <span class="eyebrow">{{ course.topic }}</span>
+                            <h1>{{ course.title }}</h1>
+                            <p class="lead">{{ course.description }}</p>
+                            <div class="meta">
+                                <template if="lessons.length">
+                                    <span class="chip"><Bn value="{{ lessons.length }}" />টা পাঠ</span>
+                                    <span class="chip">মোট <Bn time="{{ lessons.reduce((sum, l) => sum + l.duration, 0) }}" /></span>
+                                    <a class="btn btn-primary" href="/{{ course.id }}/{{ lessons[0].slug }}/">প্রথম পাঠ শুরু করুন</a>
+                                </template>
+                                <template else>
+                                    <span class="chip soon">শীঘ্রই আসছে</span>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="art rv">
+                            <Cover color="{{ course.color }}" icon="{{ course.icon }}" soon="{{ !lessons.length }}" count="{{ lessons.length }}" unit="পাঠ" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="list-wrap">
+                <div class="wrap">
+                    <template if="lessons.length">
+                        <h2 class="lh">সব পাঠ</h2>
+                        <ol class="list">
+                            <template for="(lesson, i) in lessons">
+                                <li class="rv">
+                                    <a class="row" href="/{{ course.id }}/{{ lesson.slug }}/">
+                                        <span class="num"><Bn value="{{ String(i + 1).padStart(2, '0') }}" /></span>
+                                        <Cover class="thumb" color="{{ course.color }}" icon="{{ course.icon }}" thumb="{{ lesson.thumb }}" seconds="{{ lesson.duration }}" />
+                                        <div class="info">
+                                            <h3>{{ lesson.title }}</h3>
+                                            <p>{{ lesson.description }}</p>
+                                        </div>
+                                        <span class="go" aria-hidden="true">→</span>
+                                    </a>
+                                </li>
+                            </template>
+                        </ol>
+                    </template>
+                    <template else>
+                        <div class="empty rv">
+                            <span class="chip soon">শীঘ্রই</span>
+                            <h2>এই course-এর পাঠ তৈরি হচ্ছে।</h2>
+                            <p>নতুন পাঠ এলে msilabs-এর LinkedIn পেইজে জানানো হয়। ততক্ষণ অন্য course আর simulator ঘুরে দেখুন।</p>
+                            <div class="acts">
+                                <a class="btn btn-primary" href="{{ data.site.links.linkedin }}" target="_blank" rel="noopener">LinkedIn-এ follow করুন</a>
+                                <a class="btn btn-ghost" href="/">সব পাঠ</a>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </section>
+        </template>
+    </template>
+</template>
+
+<style>
+    .hero{position:relative;overflow:hidden;padding:48px 0 72px;border-bottom:1px solid var(--border)}
+    .hero::before{content:"";position:absolute;inset:-20% -10% auto auto;width:640px;height:520px;background:radial-gradient(closest-side,var(--c),transparent);opacity:.18;pointer-events:none}
+    .hero.mint{--c:#1ED6A8}
+    .hero.coral{--c:#FF7A5C}
+    .hero.sun{--c:#FFB020}
+    .hero.indigo{--c:#7C83FF}
+    .crumbs{display:flex;flex-wrap:wrap;gap:8px;font-size:14.5px;color:var(--dim);margin-bottom:36px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--mint)}
+    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:56px;align-items:center}
+    h1{font-size:clamp(34px,5vw,56px);line-height:1.15;font-weight:700;letter-spacing:-.015em;margin:16px 0 16px}
+    .lead{font-size:18.5px;color:var(--muted);max-width:620px}
+    .meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:28px}
+    .meta .btn{margin-left:6px}
+    .art{filter:drop-shadow(0 40px 60px rgba(0,0,0,.5))}
+    .list-wrap{padding:64px 0 96px}
+    .lh{font-size:24px;font-weight:700;margin-bottom:20px}
+    .list{list-style:none;display:grid;gap:14px}
+    .row{display:grid;grid-template-columns:44px 220px 1fr 32px;gap:24px;align-items:center;padding:12px 20px 12px 16px;border-radius:18px;background:var(--surface);border:1px solid var(--border);text-decoration:none;color:inherit;transition:border-color .2s,background .2s}
+    .row:hover{border-color:rgba(30,214,168,.35);background:var(--surface-2)}
+    .num{font:600 15px/1 var(--mono);color:var(--dim);text-align:center}
+    .info h3{font-size:21px;line-height:1.4;font-weight:700;margin-bottom:4px}
+    .info p{color:var(--muted);font-size:15.5px}
+    .go{font-size:22px;color:var(--dim);transition:transform .2s,color .2s}
+    .row:hover .go{color:var(--mint);transform:translateX(4px)}
+    .empty{max-width:640px;padding:44px;border-radius:24px;background:var(--surface);border:1px dashed var(--border-2)}
+    .empty h2{font-size:26px;font-weight:700;margin:18px 0 8px}
+    .empty p{color:var(--muted)}
+    .acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+
+    @media (max-width:960px){
+        .grid{grid-template-columns:1fr;gap:36px}
+        .art{max-width:520px}
+    }
+    @media (max-width:720px){
+        .row{grid-template-columns:1fr;gap:14px;padding:12px}
+        .num,.go{display:none}
+        .info{padding:0 6px 6px}
+        .empty{padding:28px 22px}
+    }
+</style>

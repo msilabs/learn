@@ -1,0 +1,12 @@
+<template>
+    <div class="cue s-box {{ props.el.tone }}" style="left:{{ props.el.x }}%;top:{{ props.el.y }}%;width:{{ props.el.w ?? 18 }}%" data-at="{{ props.el.at }}" data-until="{{ props.el.until }}">
+        <template if="props.el.icon"><i>{{ props.el.icon }}</i></template>
+        <b>{{ props.el.text }}</b>
+    </div>
+</template>
+
+<style>
+    .s-box{padding:1.4cqw .6cqw;text-align:center;border-radius:1.2cqw;border:.25cqw solid var(--tone,var(--ink));background:var(--stage);color:var(--tone,var(--ink))}
+    i{display:block;font-style:normal;font-size:4.4cqw;line-height:1.1}
+    b{font-size:2cqw}
+</style>
