@@ -1,6 +1,7 @@
 // Lesson tool: builds everything from drafts/<course>/<slug>.md.
 //   node tools/lesson.mjs voice <course> <slug>   -> drafts/<course>/<slug>.voice.txt
-//   node tools/lesson.mjs og <course> <slug>      -> public/og/<course>/<slug>.png (needs Google Chrome)
+//   node tools/lesson.mjs og <course> <slug>      -> public/og/<course>/<slug>.jpg (needs Google Chrome, macOS sips)
+//   node tools/lesson.mjs og <course>             -> public/og/<course>.jpg, the course share image
 //   node tools/lesson.mjs sync <course> <slug>    -> data/<course>/<slug>.json (needs macOS afconvert)
 //
 // A draft line (L1, L2, ...) is one paragraph of the narration. Each paragraph is split into
@@ -10,20 +11,27 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const [cmd, course, slug] = process.argv.slice(2);
-if (!['voice', 'og', 'sync'].includes(cmd) || !course || !slug) {
-    console.error('usage: node tools/lesson.mjs <voice|og|sync> <course> <slug>');
+const courseOnly = cmd === 'og' && course && !slug;
+if (!['voice', 'og', 'sync'].includes(cmd) || !course || (!slug && !courseOnly)) {
+    console.error('usage: node tools/lesson.mjs <voice|sync> <course> <slug>');
+    console.error('       node tools/lesson.mjs og <course> [slug]');
     process.exit(1);
 }
 
 const draftPath = `drafts/${course}/${slug}.md`;
 const voicePath = `drafts/${course}/${slug}.voice.txt`;
 const audioPath = `public/audio/${course}/${slug}.mp3`;
-const ogPath = `public/og/${course}/${slug}.png`;
+const ogPath = `public/og/${course}/${slug}.jpg`;
 const dataPath = `data/${course}/${slug}.json`;
+
+if (courseOnly) {
+    courseOg();
+    process.exit(0);
+}
 
 const draft = readDraft(draftPath);
 
@@ -108,28 +116,46 @@ function voice() {
     console.log(`wrote ${voicePath} (${draft.lines.length} paragraphs)`);
 }
 
-function og() {
+function shoot(params, outPath) {
     const chrome = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
     if (!existsSync(chrome)) fail('Google Chrome not found');
-    const { og_icon, og_text } = draft.fm;
-    if (!og_icon && !og_text) fail('add og_icon and/or og_text to the front matter');
 
-    const courses = JSON.parse(readFileSync('data/courses.json', 'utf8'));
-    const color = courses.find((c) => c.id === course)?.color ?? 'mint';
     const url = pathToFileURL(resolve('tools/og.html'));
-    url.search = new URLSearchParams({ icon: og_icon ?? '', text: og_text ?? '', color }).toString();
+    url.search = new URLSearchParams(params).toString();
 
-    mkdirSync(`public/og/${course}`, { recursive: true });
+    mkdirSync(dirname(resolve(outPath)), { recursive: true });
+    const shot = join(tmpdir(), `og-${process.pid}.png`);
     execFileSync(chrome, [
         '--headless=new',
         '--hide-scrollbars',
         '--force-device-scale-factor=1',
         '--window-size=1200,630',
         '--virtual-time-budget=5000',
-        `--screenshot=${resolve(ogPath)}`,
+        `--screenshot=${shot}`,
         url.href,
     ], { stdio: 'ignore' });
-    console.log(`wrote ${ogPath}`);
+
+    // JPEG keeps the share image around 60 KB; the PNG gradient is 350 KB, and WhatsApp drops big images
+    execFileSync('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', '88', shot, '--out', resolve(outPath)], { stdio: 'ignore' });
+    rmSync(shot);
+    console.log(`wrote ${outPath}`);
+}
+
+function courseColor() {
+    const courses = JSON.parse(readFileSync('data/courses.json', 'utf8'));
+    return courses.find((c) => c.id === course) ?? fail(`course "${course}" not in data/courses.json`);
+}
+
+function og() {
+    const { og_icon, og_text, title } = draft.fm;
+    if (!og_icon && !og_text) fail('add og_icon and/or og_text to the front matter');
+
+    shoot({ icon: og_icon ?? '', text: og_text ?? '', sub: title ?? '', color: courseColor().color ?? 'mint' }, ogPath);
+}
+
+function courseOg() {
+    const c = courseColor();
+    shoot({ icon: c.icon ?? '', text: c.title, color: c.color ?? 'mint' }, `public/og/${course}.jpg`);
 }
 
 function silences(wavPath, thresholdDb = -35, minLength = 0.15) {
@@ -327,7 +353,7 @@ function sync() {
         ...(el.items ? { items: el.items.map((it) => ({ ...it, at: time(it.at), until: time(it.until) })) } : {}),
     }));
 
-    const thumb = fm.thumb ?? (existsSync(ogPath) ? `/og/${course}/${slug}.png` : undefined);
+    const thumb = fm.thumb ?? (existsSync(ogPath) ? `/og/${course}/${slug}.jpg` : undefined);
     const lesson = {
         title: fm.title,
         description: fm.description,

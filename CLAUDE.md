@@ -23,7 +23,7 @@
 | --- | --- | --- |
 | `drafts/<course>/<slug>.md` | Claude | পাঠের উৎস: voice, caption, দৃশ্য |
 | `drafts/<course>/<slug>.voice.txt` | `tools/lesson.mjs voice` | চূড়ান্ত script, ড্রাফটের voice থেকে |
-| `public/og/<course>/<slug>.png` | `tools/lesson.mjs og` | thumbnail আর শেয়ারের ছবি, ১২০০×৬৩০ |
+| `public/og/<course>/<slug>.jpg` | `tools/lesson.mjs og` | thumbnail আর শেয়ারের ছবি, ১২০০×৬৩০ |
 | `public/audio/<course>/<slug>.mp3` | মালিক বানান, Claude ছোট করে | অডিও, 64 kbps mono MP3 |
 | `data/<course>/<slug>.json` | `tools/lesson.mjs sync` | সাইট যা পড়ে |
 
@@ -200,7 +200,8 @@ caption: সাইটটা যদি শুধু HTTP হয়, তাহল�
 `tools/lesson.mjs` ড্রাফট থেকে সব বানায়। এর কোনো dependency নেই, কিন্তু এটা শুধু macOS-এ চলে।
 
 - **`voice`:** `.voice.txt` বানায়, অনুচ্ছেদের মাঝে একটা খালি লাইন রেখে।
-- **`og`:** `tools/og.html` থেকে Google Chrome headless দিয়ে PNG বানায়। রং আসে `data/courses.json`-এ course-এর `color` থেকে।
+- **`og`:** `tools/og.html` থেকে Google Chrome headless দিয়ে ছবি তুলে `sips` দিয়ে JPEG বানায় (প্রায় ৬০ KB; PNG ৩৫০ KB হয়, WhatsApp বড় ছবি বাদ দেয়)। ছবিতে বড় লেখার নিচে পাঠের নাম থাকে। রং আসে `data/courses.json`-এ course-এর `color` থেকে।
+- **`og <course>` (slug ছাড়া):** course পেইজের শেয়ারের ছবি, `public/og/<course>.jpg`। নতুন course যোগ করলে এটা চালাও।
 - **`sync`:** macOS-এর `afconvert` দিয়ে অডিও পড়ে।
   1. **বিরতি দিয়ে চেষ্টা:** নীরবতাগুলো মাপে, তারপর দরকার সংখ্যক সবচেয়ে লম্বা বিরতিকে বাক্যের সীমা ধরে। বাক্য N টা হলে বিরতি লাগে N − ১টা।
   2. **গতি মিলিয়ে চেষ্টা:** সেই বিরতিগুলো অন্যগুলোর চেয়ে স্পষ্ট লম্বা না হলে, যেটা কমা-র পরে প্রায়ই হয়, প্রতিটা বাক্যের কথা বলার গতি মিলিয়ে সবচেয়ে সামঞ্জস্যপূর্ণ ভাগটা নেয়। নেয় তখনই, যখন সেটা পরেরটার চেয়ে পরিষ্কারভাবে ভালো।
@@ -215,6 +216,7 @@ script-এ ভুল থাকলে ঠিক করো, কিন্তু স
 
 কোনো course-এর প্রথম পাঠ sync করার আগে দেখে নাও:
 
+- **course-এর og ছবি:** `node tools/lesson.mjs og <course>` চালাও।
 - **`data/courses.json`:** course আছে কি না। না থাকলে মালিকের কাছ থেকে `title`, `description`, `topic`, `color`, `icon` জেনে যোগ করো। `status: "soon"` থাকলে সেটা সরানোর আগে মালিককে জিজ্ঞেস করো।
 - **পেইজের ফাইল:** `pages/<course>/page.alo` আর `pages/<course>/[slug]/page.alo` আছে কি না। না থাকলে `pages/web/`-এর ফাইল দুটো হুবহু কপি করো। সব course-এ এই দুটো ফাইল একই থাকবে, একটা বদলালে সবগুলো বদলাও।
 

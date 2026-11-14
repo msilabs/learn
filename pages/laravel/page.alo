@@ -2,6 +2,18 @@
     <title>{{ data.courses.find((c) => c.id === route.path.split('/')[1]).title }} | msilabs শিখুন</title>
     <meta name="description" content="{{ data.courses.find((c) => c.id === route.path.split('/')[1]).description }}">
     <link rel="canonical" href="{{ data.site.canonical }}{{ route.path }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ data.site.canonical }}{{ route.path }}">
+    <meta property="og:title" content="{{ data.courses.find((c) => c.id === route.path.split('/')[1]).title }} | msilabs শিখুন">
+    <meta property="og:description" content="{{ data.courses.find((c) => c.id === route.path.split('/')[1]).description }}">
+    <meta property="og:locale" content="bn_BD">
+    <meta property="og:image" content="{{ data.site.canonical }}/og/{{ route.path.split('/')[1] }}.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{ data.courses.find((c) => c.id === route.path.split('/')[1]).title }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ data.courses.find((c) => c.id === route.path.split('/')[1]).title }} | msilabs শিখুন">
+    <meta name="twitter:description" content="{{ data.courses.find((c) => c.id === route.path.split('/')[1]).description }}">
 </head>
 
 <template>

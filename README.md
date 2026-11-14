@@ -23,7 +23,7 @@ data/courses.json             course-এর তালিকা (id, title, descr
 data/<course>/<slug>.json     একেকটা পাঠ: অডিও, ক্যাপশন আর দৃশ্য
 data/interactive.json         simulator-এর কার্ড
 public/audio/<course>/<slug>.mp3
-public/og/<course>/<slug>.png thumbnail আর শেয়ারের ছবি (১২০০×৬৩০)
+public/og/<course>/<slug>.jpg thumbnail আর শেয়ারের ছবি (১২০০×৬৩০)
 drafts/<course>/<slug>.md     পাঠের ড্রাফট: এখান থেকেই JSON, voice script আর ছবি তৈরি হয়
 tools/lesson.mjs              ড্রাফট থেকে voice script, OG image আর JSON বানায়
 pages/<course>/page.alo       course পেইজ (সব course-এ হুবহু একই ফাইল)
@@ -39,7 +39,7 @@ components/scene/*.alo        দৃশ্যের উপাদান (title, l
 
 ```
 node tools/lesson.mjs voice web https   # drafts/web/https.voice.txt, ElevenLabs-এ পেস্ট করার জন্য
-node tools/lesson.mjs og web https      # public/og/web/https.png
+node tools/lesson.mjs og web https      # public/og/web/https.jpg
 node tools/lesson.mjs sync web https    # অডিওর বিরতি মেপে প্রতিটা বাক্যের সময়, data/web/https.json
 ```
 
