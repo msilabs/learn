@@ -172,24 +172,27 @@ function silences(wavPath, thresholdDb = -35, minLength = 0.15) {
     return { gaps, duration: samples / rate };
 }
 
+// how unevenly the sentences are spoken (seconds per character) if these gaps are the sentence breaks
+function rateVariation(set, texts, duration) {
+    const sorted = set.toSorted((a, b) => a.start - b.start);
+    const rates = [];
+    let start = 0;
+    for (const [i, g] of sorted.entries()) {
+        rates.push((g.start - start) / texts[i].length);
+        start = g.end;
+    }
+    rates.push((duration - start) / texts.at(-1).length);
+    const mean = rates.reduce((a, b) => a + b) / rates.length;
+    const sd = Math.sqrt(rates.reduce((a, b) => a + (b - mean) ** 2, 0) / rates.length);
+    return sd / mean;
+}
+
 // Natural pauses inside a sentence (after a comma) can be as long as the pause between sentences.
 // Take the longest gaps plus up to three extra, try every way of leaving extras out, and keep the
 // split where every sentence is spoken at a similar speed (seconds per character).
 // Accept it only if it is clearly better than every other split.
 function bySpeakingRate(ranked, need, texts, duration) {
-    const variation = (set) => {
-        const sorted = set.toSorted((a, b) => a.start - b.start);
-        const rates = [];
-        let start = 0;
-        for (const [i, g] of sorted.entries()) {
-            rates.push((g.start - start) / texts[i].length);
-            start = g.end;
-        }
-        rates.push((duration - start) / texts.at(-1).length);
-        const mean = rates.reduce((a, b) => a + b) / rates.length;
-        const sd = Math.sqrt(rates.reduce((a, b) => a + (b - mean) ** 2, 0) / rates.length);
-        return sd / mean;
-    };
+    const variation = (set) => rateVariation(set, texts, duration);
     const combos = (n, k, from = 0) =>
         k === 0 ? [[]] : Array.from({ length: n - from }, (_, i) => from + i).flatMap((i) => combos(n, k - 1, i + 1).map((c) => [i, ...c]));
 
@@ -215,6 +218,59 @@ function bySpeakingRate(ranked, need, texts, duration) {
         console.log(`pause at ${g.start.toFixed(2)}s (${g.len.toFixed(2)}s) is inside sentence ${sentence}, not between sentences`);
     }
     return best.set;
+}
+
+// When a real sentence break is shorter than some comma pauses, it is not among the longest gaps.
+// Walk through every gap in order instead (dynamic programming) and pick the split where each
+// sentence's length in seconds best matches its length in characters, preferring longer pauses.
+// Accept it only if the same split wins for every pause weight and the speeds stay even.
+function byAlignment(gaps, texts, duration) {
+    const n = texts.length;
+    if (gaps.length < n - 1) return null;
+    const perChar = duration / texts.reduce((sum, t) => sum + t.length, 0);
+    const points = [{ end: 0, len: 0 }, ...gaps];
+    const miss = (k, from, to) => {
+        const expected = texts[k].length * perChar;
+        return ((to - from - expected) / expected) ** 2;
+    };
+
+    const solve = (weight) => {
+        // cost[k][g]: lowest cost when sentence k ends at points[g]; back[k][g]: where it started
+        const cost = Array.from({ length: n - 1 }, () => new Array(points.length).fill(Infinity));
+        const back = Array.from({ length: n - 1 }, () => new Array(points.length).fill(0));
+        for (let g = 1; g < points.length; g++) cost[0][g] = miss(0, 0, points[g].start) - weight * points[g].len;
+        for (let k = 1; k < n - 1; k++) {
+            for (let g = k + 1; g < points.length; g++) {
+                for (let h = k; h < g; h++) {
+                    const c = cost[k - 1][h] + miss(k, points[h].end, points[g].start) - weight * points[g].len;
+                    if (c < cost[k][g]) {
+                        cost[k][g] = c;
+                        back[k][g] = h;
+                    }
+                }
+            }
+        }
+        let last = 0;
+        let lowest = Infinity;
+        for (let g = n - 1; g < points.length; g++) {
+            const c = cost[n - 2][g] + miss(n - 1, points[g].end, duration);
+            if (c < lowest) {
+                lowest = c;
+                last = g;
+            }
+        }
+        const chosen = [];
+        for (let k = n - 2, g = last; k >= 0; g = back[k][g], k--) chosen.unshift(points[g]);
+        return chosen;
+    };
+
+    const splits = [0.5, 1, 2].map(solve);
+    const key = (set) => set.map((g) => g.start).join(',');
+    const stable = splits.every((s) => key(s) === key(splits[0]));
+    const cv = rateVariation(splits[0], texts, duration);
+    console.log(`alignment over all pauses: rate variation ${cv.toFixed(3)}, ${stable ? 'same split for every pause weight' : 'split changes with pause weight'}`);
+    if (!stable || cv > 0.15) return null;
+    return splits[0];
 }
 
 function sync() {
@@ -250,6 +306,10 @@ function sync() {
     if (chosen.length < need || shortestChosen - longestOther < 0.2) {
         console.log('gap lengths alone are not decisive, checking speaking rate per sentence...');
         chosen = bySpeakingRate(ranked, need, spoken, duration);
+        if (!chosen) {
+            console.log('no clear winner among the longest pauses, aligning sentences over all pauses...');
+            chosen = byAlignment(gaps, spoken, duration);
+        }
         if (!chosen) {
             console.error('STOP: could not tell the pauses between sentences from other pauses.');
             console.error('Check that the audio follows the script, with no extra or missing sentences.');
