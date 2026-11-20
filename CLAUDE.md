@@ -28,7 +28,7 @@
 | `data/<course>/<slug>.json` | `tools/lesson.mjs sync` | সাইট যা পড়ে |
 
 - `slug` হবে ছোট হাতের ইংরেজি, kebab-case (`https`, `dns-lookup`)।
-- প্রতিটা পাঠের ড্রাফট নিজের ফোল্ডারে, নামের শুরুতে দুই অঙ্কের ক্রম: `drafts/web/03-https/`। নম্বর শুধু ফোল্ডার সাজানোর জন্য; URL, অডিও, ছবি আর JSON-এ থাকে শুধু `slug`। টুলের কমান্ডেও শুধু `slug` লেখো (`sync web https`), ফোল্ডার টুল নিজেই খুঁজে নেয়।
+- প্রতিটা পাঠের ড্রাফট নিজের ফোল্ডারে, নামের শুরুতে দুই অঙ্কের ক্রম: `drafts/web/04-https/`। নম্বর শুধু ফোল্ডার সাজানোর জন্য; URL, অডিও, ছবি আর JSON-এ থাকে শুধু `slug`। টুলের কমান্ডেও শুধু `slug` লেখো (`sync web https`), ফোল্ডার টুল নিজেই খুঁজে নেয়।
 - মাঝে নতুন পাঠ ঢোকালে শুধু ফোল্ডারের নম্বর আর ড্রাফটের `order` বদলাও। URL বদলায় না।
 - কোনো component লিখতে হয় না।
 
@@ -94,7 +94,7 @@
 
 ## Script কীভাবে লিখবে
 
-HTTPS পাঠের চূড়ান্ত script মালিক নিজে ঠিক করেছেন। নতুন script-এর আদর্শ ওইটাই: [drafts/web/03-https/https.voice.txt](drafts/web/03-https/https.voice.txt)। লেখার আগে একবার পড়ে নাও।
+HTTPS পাঠের চূড়ান্ত script মালিক নিজে ঠিক করেছেন। নতুন script-এর আদর্শ ওইটাই: [drafts/web/04-https/https.voice.txt](drafts/web/04-https/https.voice.txt)। লেখার আগে একবার পড়ে নাও।
 
 ### দৈর্ঘ্য
 

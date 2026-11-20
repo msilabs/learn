@@ -3,7 +3,7 @@ course: web
 slug: rendering
 title: ব্রাউজার কীভাবে পেজ আঁকে
 description: সার্ভার পেজের ছবি পাঠায় না। HTML থেকে DOM গাছ, CSS থেকে স্টাইল, তারপর লেআউট আর পেইন্ট, ব্রাউজার নিজেই পেজ আঁকে, দেড় মিনিটে।
-order: 2
+order: 5
 date: 2026-11-14
 og_icon: 🎨
 og_text: Rendering

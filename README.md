@@ -38,7 +38,7 @@ components/scene/*.alo        দৃশ্যের উপাদান (title, l
 সাধারণ পথ হলো ড্রাফট থেকে বানানো (বিস্তারিত `CLAUDE.md`-তে):
 
 ```
-node tools/lesson.mjs voice web https   # drafts/web/03-https/https.voice.txt, ElevenLabs-এ পেস্ট করার জন্য
+node tools/lesson.mjs voice web https   # drafts/web/04-https/https.voice.txt, ElevenLabs-এ পেস্ট করার জন্য
 node tools/lesson.mjs og web https      # public/og/web/https.jpg
 node tools/lesson.mjs sync web https    # অডিওর বিরতি মেপে প্রতিটা বাক্যের সময়, data/web/https.json
 ```

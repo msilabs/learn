@@ -3,7 +3,7 @@ course: web
 slug: https
 title: HTTPS কীভাবে কাজ করে
 description: ক্যাফের Wi-Fi-তে বসে ব্যাংকে লগইন করলে পাশের কেউ কি পাসওয়ার্ড দেখতে পায়? HTTPS-এর গোপন চাবি, সার্টিফিকেট আর এনক্রিপশন, দেড় মিনিটে।
-order: 1
+order: 4
 date: 2026-11-13
 og_icon: 🔒
 og_text: HTTPS
