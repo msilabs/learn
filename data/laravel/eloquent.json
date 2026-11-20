@@ -1,0 +1,686 @@
+{
+    "title": "Model আর Eloquent",
+    "description": "ডেটাবেস থেকে পোস্ট আনতে কি প্রতিবার SQL লিখতে হবে? table মানে class, row মানে object, all, find, where, save, আর আড়ালে থাকা SQL, দেড় মিনিটে।",
+    "order": 8,
+    "date": "2026-11-20",
+    "duration": 87.5,
+    "audio": "/audio/laravel/eloquent.mp3",
+    "thumb": "/og/laravel/eloquent.jpg",
+    "captions": [
+        {
+            "t": 0,
+            "text": "ডেটাবেস থেকে পোস্ট আনতে কি প্রতিবার SQL লিখতে হবে?"
+        },
+        {
+            "t": 4.3,
+            "text": "লেখা যায়।"
+        },
+        {
+            "t": 5.3,
+            "text": "কিন্তু প্রতিটা কোয়েরি হাতে লিখলে, ভুল আর একই কথা বারবার লেখা দুটোই বাড়ে।"
+        },
+        {
+            "t": 11.2,
+            "text": "Laravel-এর Eloquent ডেটাবেসের প্রতিটা টেবিলকে একটা PHP ক্লাস বানিয়ে দেয়।"
+        },
+        {
+            "t": 16.5,
+            "text": "এই ক্লাসের নাম model।"
+        },
+        {
+            "t": 18.4,
+            "text": "posts টেবিলের জন্য Post model।"
+        },
+        {
+            "t": 20.7,
+            "text": "আর টেবিলের প্রতিটা সারি হয়ে যায় একটা অবজেক্ট।"
+        },
+        {
+            "t": 23.9,
+            "text": "অফিসের ভাষায়, model হলো রেকর্ড রুম।"
+        },
+        {
+            "t": 26.8,
+            "text": "আপনি শুধু বলেন কী চাই, কোন তাক থেকে আনতে হবে সেটা তার কাজ।"
+        },
+        {
+            "t": 31.3,
+            "text": "সব পোস্ট চাইলে Post::all()।"
+        },
+        {
+            "t": 33.5,
+            "text": "5 নম্বরটা চাইলে Post::find(5)।"
+        },
+        {
+            "t": 36.3,
+            "text": "শর্ত দিতে চাইলে where, যেমন শুধু প্রকাশিত পোস্টগুলো।"
+        },
+        {
+            "t": 40.5,
+            "text": "পাওয়া পোস্টের শিরোনাম পড়তে, $post->title।"
+        },
+        {
+            "t": 44.1,
+            "text": "কলামের নামই প্রপার্টির নাম।"
+        },
+        {
+            "t": 46.1,
+            "text": "কিন্তু SQL যদি না-ই লিখি, ডেটাবেস বোঝে কীভাবে?"
+        },
+        {
+            "t": 50.4,
+            "text": "Eloquent পর্দার আড়ালে নিজেই SQL বানিয়ে পাঠায়!"
+        },
+        {
+            "t": 53.9,
+            "text": "আর আপনার দেওয়া মানগুলো পাঠায় আলাদা করে।"
+        },
+        {
+            "t": 56.7,
+            "text": "তাই কেউ ফর্মে SQL লিখে দিলেও, সেটা চলে না।"
+        },
+        {
+            "t": 60,
+            "text": "নতুন পোস্ট রাখাও সহজ।"
+        },
+        {
+            "t": 61.9,
+            "text": "অবজেক্ট বানান, মান বসান, তারপর save()।"
+        },
+        {
+            "t": 64.8,
+            "text": "তবে একটা কথা মনে রাখবেন।"
+        },
+        {
+            "t": 66.8,
+            "text": "Eloquent SQL দূর করে না, শুধু আড়াল করে।"
+        },
+        {
+            "t": 70.5,
+            "text": "কোয়েরি ধীর হলে বা ফল ভুল এলে, SQL না জানলে বুঝবেন না সমস্যা কোথায়।"
+        },
+        {
+            "t": 76.3,
+            "text": "তাই মাঝে মাঝে দেখে নিন, আপনার কোড আসলে কোন SQL বানাচ্ছে।"
+        },
+        {
+            "t": 80.5,
+            "text": "এখনই চালান php artisan tinker, তারপর লিখুন User::count()।"
+        },
+        {
+            "t": 85,
+            "text": "ডেটাবেসে কতজন, সাথে সাথে উত্তর।"
+        }
+    ],
+    "scene": [
+        {
+            "type": "note",
+            "at": 0,
+            "until": 5.3,
+            "text": "SELECT * FROM posts WHERE id = 5;",
+            "x": 20,
+            "y": 30,
+            "w": 60,
+            "mono": true
+        },
+        {
+            "type": "text",
+            "at": 0,
+            "until": 4.3,
+            "text": "প্রতিবার? 🤔",
+            "x": 25,
+            "y": 44,
+            "w": 50,
+            "tone": "accent"
+        },
+        {
+            "type": "text",
+            "at": 4.3,
+            "until": 5.3,
+            "text": "লেখা যায় ✓",
+            "x": 25,
+            "y": 44,
+            "w": 50,
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 5.3,
+            "until": 11.2,
+            "text": "SELECT * FROM posts WHERE id = 5;",
+            "x": 15,
+            "y": 26,
+            "w": 70,
+            "mono": true,
+            "tone": "danger"
+        },
+        {
+            "type": "note",
+            "at": 5.3,
+            "until": 11.2,
+            "text": "SELECT * FROM posts WHERE published = 1;",
+            "x": 15,
+            "y": 35,
+            "w": 70,
+            "mono": true,
+            "tone": "danger"
+        },
+        {
+            "type": "note",
+            "at": 5.3,
+            "until": 11.2,
+            "text": "SELECT * FROM posts ORDER BY id DESC;",
+            "x": 15,
+            "y": 44,
+            "w": 70,
+            "mono": true,
+            "tone": "danger"
+        },
+        {
+            "type": "text",
+            "at": 5.3,
+            "until": 11.2,
+            "text": "❌ ভুল · 🔁 একই কথা বারবার",
+            "x": 15,
+            "y": 56,
+            "w": 70,
+            "tone": "danger"
+        },
+        {
+            "type": "label",
+            "at": 11.2,
+            "until": 18.4,
+            "text": "Eloquent",
+            "tone": "accent"
+        },
+        {
+            "type": "line",
+            "at": 11.2,
+            "until": 18.4,
+            "x": 38,
+            "y": 43.5,
+            "w": 24
+        },
+        {
+            "type": "box",
+            "at": 11.2,
+            "until": 18.4,
+            "icon": "🛢️",
+            "text": "posts টেবিল",
+            "x": 8,
+            "y": 34,
+            "w": 30
+        },
+        {
+            "type": "box",
+            "at": 11.2,
+            "until": 18.4,
+            "icon": "🧩",
+            "text": "PHP ক্লাস",
+            "x": 62,
+            "y": 34,
+            "w": 30,
+            "tone": "accent"
+        },
+        {
+            "type": "text",
+            "at": 16.5,
+            "until": 18.4,
+            "text": "= model",
+            "x": 62,
+            "y": 56,
+            "w": 30,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 18.4,
+            "until": 23.9,
+            "text": "table = class, row = object"
+        },
+        {
+            "type": "note",
+            "at": 18.4,
+            "until": 23.9,
+            "text": "class Post extends Model",
+            "x": 20,
+            "y": 24,
+            "w": 60,
+            "mono": true,
+            "tone": "accent"
+        },
+        {
+            "type": "text",
+            "at": 18.4,
+            "until": 23.9,
+            "text": "posts টেবিল  👉  Post model",
+            "x": 20,
+            "y": 34,
+            "w": 60
+        },
+        {
+            "type": "note",
+            "at": 20.7,
+            "until": 23.9,
+            "text": "সারি: id=5, title='হ্যালো'",
+            "x": 6,
+            "y": 46,
+            "w": 42,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 20.7,
+            "until": 23.9,
+            "text": "👉 $post (একটা অবজেক্ট)",
+            "x": 52,
+            "y": 46,
+            "w": 42,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 23.9,
+            "until": 31.3,
+            "text": "রেকর্ড রুম",
+            "tone": "accent"
+        },
+        {
+            "type": "box",
+            "at": 23.9,
+            "until": 31.3,
+            "text": "🚪 ফটক",
+            "x": 1.5,
+            "y": 36,
+            "w": 14.5
+        },
+        {
+            "type": "line",
+            "at": 23.9,
+            "until": 31.3,
+            "x": 16,
+            "y": 41,
+            "w": 2
+        },
+        {
+            "type": "box",
+            "at": 23.9,
+            "until": 31.3,
+            "text": "🛎️ রিসেপশন",
+            "x": 18,
+            "y": 36,
+            "w": 14.5
+        },
+        {
+            "type": "line",
+            "at": 23.9,
+            "until": 31.3,
+            "x": 32.5,
+            "y": 41,
+            "w": 2
+        },
+        {
+            "type": "box",
+            "at": 23.9,
+            "until": 31.3,
+            "text": "💂 রক্ষী",
+            "x": 34.5,
+            "y": 36,
+            "w": 14.5
+        },
+        {
+            "type": "line",
+            "at": 23.9,
+            "until": 31.3,
+            "x": 49,
+            "y": 41,
+            "w": 2
+        },
+        {
+            "type": "box",
+            "at": 23.9,
+            "until": 31.3,
+            "text": "👔 কর্মকর্তা",
+            "x": 51,
+            "y": 36,
+            "w": 14.5
+        },
+        {
+            "type": "line",
+            "at": 23.9,
+            "until": 31.3,
+            "x": 65.5,
+            "y": 41,
+            "w": 2
+        },
+        {
+            "type": "box",
+            "at": 23.9,
+            "until": 31.3,
+            "text": "🗄️ রেকর্ড রুম",
+            "x": 67.5,
+            "y": 36,
+            "w": 14.5,
+            "tone": "accent"
+        },
+        {
+            "type": "line",
+            "at": 23.9,
+            "until": 31.3,
+            "x": 82,
+            "y": 41,
+            "w": 2
+        },
+        {
+            "type": "box",
+            "at": 23.9,
+            "until": 31.3,
+            "text": "📄 চিঠি",
+            "x": 84,
+            "y": 36,
+            "w": 14.5
+        },
+        {
+            "type": "text",
+            "at": 26.8,
+            "until": 31.3,
+            "text": "আপনি: কী চাই · model: কোন তাক থেকে আনবে",
+            "x": 10,
+            "y": 54,
+            "w": 80,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 31.3,
+            "until": 36.3,
+            "text": "আনা"
+        },
+        {
+            "type": "note",
+            "at": 31.3,
+            "until": 36.3,
+            "text": "Post::all()   // সব পোস্ট",
+            "x": 15,
+            "y": 30,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 33.5,
+            "until": 36.3,
+            "text": "Post::find(5)   // 5 নম্বর",
+            "x": 15,
+            "y": 40,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "label",
+            "at": 36.3,
+            "until": 40.5,
+            "text": "শর্ত: where"
+        },
+        {
+            "type": "note",
+            "at": 36.3,
+            "until": 40.5,
+            "text": "Post::where('published', true)->get();",
+            "x": 12,
+            "y": 32,
+            "w": 76,
+            "mono": true
+        },
+        {
+            "type": "text",
+            "at": 36.3,
+            "until": 40.5,
+            "text": "শুধু প্রকাশিত পোস্ট ✓",
+            "x": 15,
+            "y": 46,
+            "w": 70,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 40.5,
+            "until": 46.1,
+            "text": "কলাম = প্রপার্টি"
+        },
+        {
+            "type": "note",
+            "at": 40.5,
+            "until": 46.1,
+            "text": "$post->title   👉   'হ্যালো'",
+            "x": 20,
+            "y": 32,
+            "w": 60,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "text",
+            "at": 44.1,
+            "until": 46.1,
+            "text": "title কলাম  👉  ->title",
+            "x": 20,
+            "y": 46,
+            "w": 60,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 46.1,
+            "until": 50.4,
+            "text": "SQL না লিখলে?"
+        },
+        {
+            "type": "text",
+            "at": 46.1,
+            "until": 50.4,
+            "text": "ডেটাবেস বোঝে কীভাবে? 🤔",
+            "x": 25,
+            "y": 42,
+            "w": 50,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 50.4,
+            "until": 53.9,
+            "text": "পর্দার আড়ালে SQL!",
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 50.4,
+            "until": 60,
+            "text": "Post::find(5)",
+            "x": 6,
+            "y": 30,
+            "w": 34,
+            "mono": true
+        },
+        {
+            "type": "text",
+            "at": 50.4,
+            "until": 60,
+            "text": "👉",
+            "x": 41,
+            "y": 31,
+            "w": 10
+        },
+        {
+            "type": "note",
+            "at": 50.4,
+            "until": 60,
+            "text": "select * from posts where id = ? limit 1",
+            "x": 52,
+            "y": 30,
+            "w": 44,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 53.9,
+            "until": 60,
+            "text": "মান যায় আলাদা করে 🛡️",
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 53.9,
+            "until": 60,
+            "text": "মান আলাদা: [5]",
+            "x": 52,
+            "y": 42,
+            "w": 44,
+            "mono": true,
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 56.7,
+            "until": 60,
+            "title": "ফর্মে লিখল: 5; DROP TABLE posts",
+            "text": "✓ শুধু একটা মান, SQL হিসেবে চলে না",
+            "x": 20,
+            "y": 56,
+            "w": 60,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 60,
+            "until": 64.8,
+            "text": "নতুন পোস্ট"
+        },
+        {
+            "type": "note",
+            "at": 61.9,
+            "until": 64.8,
+            "text": "$post = new Post;",
+            "x": 20,
+            "y": 28,
+            "w": 60,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 61.9,
+            "until": 64.8,
+            "text": "$post->title = 'নতুন পোস্ট';",
+            "x": 20,
+            "y": 37,
+            "w": 60,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 61.9,
+            "until": 64.8,
+            "text": "$post->save();",
+            "x": 20,
+            "y": 46,
+            "w": 60,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 64.8,
+            "until": 80.5,
+            "text": "সাবধান",
+            "tone": "danger"
+        },
+        {
+            "type": "box",
+            "at": 66.8,
+            "until": 70.5,
+            "icon": "🙈",
+            "text": "SQL আড়ালে, কিন্তু আছেই",
+            "x": 30,
+            "y": 30,
+            "w": 40,
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 70.5,
+            "until": 76.3,
+            "text": "🐢 কোয়েরি ধীর?   ❌ ফল ভুল?",
+            "x": 20,
+            "y": 30,
+            "w": 60,
+            "tone": "danger"
+        },
+        {
+            "type": "text",
+            "at": 70.5,
+            "until": 76.3,
+            "text": "SQL না জানলে কারণ খুঁজে পাবেন না",
+            "x": 15,
+            "y": 44,
+            "w": 70,
+            "tone": "danger"
+        },
+        {
+            "type": "note",
+            "at": 76.3,
+            "until": 80.5,
+            "text": "Post::where('published', true)->toSql();",
+            "x": 12,
+            "y": 30,
+            "w": 76,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 76.3,
+            "until": 80.5,
+            "text": "👉 select * from posts where published = ?",
+            "x": 12,
+            "y": 40,
+            "w": 76,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 80.5,
+            "text": "নিজে দেখুন 👀",
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 80.5,
+            "text": "$ php artisan tinker",
+            "x": 20,
+            "y": 26,
+            "w": 60,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 80.5,
+            "text": "> User::count()",
+            "x": 20,
+            "y": 36,
+            "w": 60,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 85,
+            "text": "= 3",
+            "x": 20,
+            "y": 46,
+            "w": 60,
+            "mono": true,
+            "tone": "ok"
+        }
+    ]
+}

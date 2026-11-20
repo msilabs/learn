@@ -262,7 +262,11 @@ function bySpeakingRate(ranked, need, texts, duration) {
 // Walk through every gap in order instead (dynamic programming) and pick the split where each
 // sentence's length in seconds best matches its length in characters, preferring longer pauses.
 // Accept it only if the same split wins for every pause weight and the speeds stay even.
-function byAlignment(gaps, texts, duration) {
+// Every sentence takes some time however short it is, so each one counts a few extra characters;
+// without this a one-word sentence like "না!" can never fit.
+function byAlignment(gaps, spoken, duration) {
+    const sentenceOverhead = 6;
+    const texts = spoken.map((t) => t + ' '.repeat(sentenceOverhead));
     const n = texts.length;
     if (gaps.length < n - 1) return null;
     const perChar = duration / texts.reduce((sum, t) => sum + t.length, 0);

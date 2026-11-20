@@ -1,0 +1,701 @@
+{
+    "title": "Controller কেন লাগে",
+    "description": "সব কাজ route-এর ফাইলে লিখলে কী হয়? controller, মেথড, Request নিজে থেকে পাওয়া, আর php artisan make:controller, দেড় মিনিটে।",
+    "order": 4,
+    "date": "2026-11-20",
+    "duration": 87.4,
+    "audio": "/audio/laravel/controller.mp3",
+    "thumb": "/og/laravel/controller.jpg",
+    "captions": [
+        {
+            "t": 0,
+            "text": "সব কাজ যদি route-এর ফাইলেই লেখেন, 50টা পেজের পর ফাইলটা দেখতে কেমন হবে?"
+        },
+        {
+            "t": 5.7,
+            "text": "হাজার লাইনের একটা জট।"
+        },
+        {
+            "t": 7.6,
+            "text": "কোন কাজ কোথায়, খুঁজে পাওয়াই কঠিন।"
+        },
+        {
+            "t": 10.3,
+            "text": "এর সমাধান controller।"
+        },
+        {
+            "t": 12.1,
+            "text": "রিসেপশন শুধু পথ দেখায়, আর কাজ করেন আলাদা ঘরের কর্মকর্তা।"
+        },
+        {
+            "t": 16.4,
+            "text": "Controller একটা সাধারণ PHP ক্লাস।"
+        },
+        {
+            "t": 19,
+            "text": "থাকে app ফোল্ডারের ভেতরে, Controllers নামের ফোল্ডারে।"
+        },
+        {
+            "t": 22.6,
+            "text": "সাধারণত একটা বিষয়ের জন্য একটা controller।"
+        },
+        {
+            "t": 25.6,
+            "text": "যেমন পোস্টের সব কাজ থাকে PostController-এ।"
+        },
+        {
+            "t": 28.6,
+            "text": "তার ভেতরে প্রতিটা কাজ একটা মেথড।"
+        },
+        {
+            "t": 31,
+            "text": "তালিকা দেখানো index, একটা পোস্ট দেখানো show।"
+        },
+        {
+            "t": 34.3,
+            "text": "এবার route শুধু বলে, /posts এলে PostController-এর index-এ পাঠাও।"
+        },
+        {
+            "t": 39.2,
+            "text": "কিন্তু কর্মকর্তা রিকোয়েস্টের তথ্য পান কোথা থেকে?"
+        },
+        {
+            "t": 42.8,
+            "text": "মেথডে Request নামের একটা প্যারামিটার চাইলেই, Laravel নিজেই সেটা ভরে দেয়!"
+        },
+        {
+            "t": 47.3,
+            "text": "এর পেছনে আছে Laravel-এর Service Container।"
+        },
+        {
+            "t": 50.1,
+            "text": "মেথড কী চাইছে দেখে, সেটা বানিয়ে হাতে দেয়।"
+        },
+        {
+            "t": 53.2,
+            "text": "কর্মকর্তা ফর্মের তথ্য পড়েন, দরকার হলে ডেটাবেস থেকে আনান, তারপর একটা view ফেরত দেন।"
+        },
+        {
+            "t": 58.8,
+            "text": "আর controller-এর ফাইল হাতে লিখতে হয় না।"
+        },
+        {
+            "t": 61.3,
+            "text": "চালান php artisan make:controller, তারপর নাম।"
+        },
+        {
+            "t": 65.6,
+            "text": "Artisan হলো Laravel-এর কমান্ড লাইনের সহকারী।"
+        },
+        {
+            "t": 68.5,
+            "text": "বলে দিলেই, সঠিক জায়গায় সঠিক কাঠামোর ফাইল বানিয়ে দেয়।"
+        },
+        {
+            "t": 72,
+            "text": "তবে একটা কথা মনে রাখবেন।"
+        },
+        {
+            "t": 73.8,
+            "text": "controller কাজের সমন্বয়কারী, সব কাজ নিজে করার জায়গা নয়।"
+        },
+        {
+            "t": 78,
+            "text": "কোনো মেথড শত লাইন ছাড়িয়ে গেলে, বুঝবেন কাজটা ভাগ করার সময় হয়েছে।"
+        },
+        {
+            "t": 82.5,
+            "text": "এখনই একটা PostController বানিয়ে, একটা route-কে তার index মেথডের দিকে পাঠিয়ে দেখুন।"
+        }
+    ],
+    "scene": [
+        {
+            "type": "note",
+            "at": 0,
+            "until": 10.3,
+            "text": "📂 routes/web.php",
+            "x": 15,
+            "y": 22,
+            "w": 70
+        },
+        {
+            "type": "note",
+            "at": 0,
+            "until": 10.3,
+            "text": "Route::get('/posts', function () { …40 লাইন… });",
+            "x": 15,
+            "y": 33,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 0,
+            "until": 10.3,
+            "text": "Route::post('/posts', function () { …60 লাইন… });",
+            "x": 15,
+            "y": 42,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 0,
+            "until": 10.3,
+            "text": "Route::get('/users', function () { …50 লাইন… });",
+            "x": 15,
+            "y": 51,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "text",
+            "at": 0,
+            "until": 5.7,
+            "text": "… আরও 47টা পেজ",
+            "x": 15,
+            "y": 62,
+            "w": 70
+        },
+        {
+            "type": "label",
+            "at": 5.7,
+            "until": 10.3,
+            "text": "🧶 হাজার লাইনের জট",
+            "tone": "danger"
+        },
+        {
+            "type": "text",
+            "at": 7.6,
+            "until": 10.3,
+            "text": "কোন কাজ কোথায়? 🔍",
+            "x": 15,
+            "y": 62,
+            "w": 70,
+            "tone": "danger"
+        },
+        {
+            "type": "label",
+            "at": 10.3,
+            "until": 16.4,
+            "text": "সমাধান: controller",
+            "tone": "ok"
+        },
+        {
+            "type": "box",
+            "at": 10.3,
+            "until": 16.4,
+            "text": "🚪 ফটক",
+            "x": 1.5,
+            "y": 36,
+            "w": 14.5
+        },
+        {
+            "type": "line",
+            "at": 10.3,
+            "until": 16.4,
+            "x": 16,
+            "y": 41,
+            "w": 2
+        },
+        {
+            "type": "box",
+            "at": 10.3,
+            "until": 16.4,
+            "text": "🛎️ রিসেপশন",
+            "x": 18,
+            "y": 36,
+            "w": 14.5
+        },
+        {
+            "type": "line",
+            "at": 10.3,
+            "until": 16.4,
+            "x": 32.5,
+            "y": 41,
+            "w": 2
+        },
+        {
+            "type": "box",
+            "at": 10.3,
+            "until": 16.4,
+            "text": "💂 রক্ষী",
+            "x": 34.5,
+            "y": 36,
+            "w": 14.5
+        },
+        {
+            "type": "line",
+            "at": 10.3,
+            "until": 16.4,
+            "x": 49,
+            "y": 41,
+            "w": 2
+        },
+        {
+            "type": "box",
+            "at": 10.3,
+            "until": 16.4,
+            "text": "👔 কর্মকর্তা",
+            "x": 51,
+            "y": 36,
+            "w": 14.5,
+            "tone": "accent"
+        },
+        {
+            "type": "line",
+            "at": 10.3,
+            "until": 16.4,
+            "x": 65.5,
+            "y": 41,
+            "w": 2
+        },
+        {
+            "type": "box",
+            "at": 10.3,
+            "until": 16.4,
+            "text": "🗄️ রেকর্ড রুম",
+            "x": 67.5,
+            "y": 36,
+            "w": 14.5
+        },
+        {
+            "type": "line",
+            "at": 10.3,
+            "until": 16.4,
+            "x": 82,
+            "y": 41,
+            "w": 2
+        },
+        {
+            "type": "box",
+            "at": 10.3,
+            "until": 16.4,
+            "text": "📄 চিঠি",
+            "x": 84,
+            "y": 36,
+            "w": 14.5
+        },
+        {
+            "type": "text",
+            "at": 12.1,
+            "until": 16.4,
+            "text": "শুধু পথ দেখায়",
+            "x": 15,
+            "y": 48,
+            "w": 20.5
+        },
+        {
+            "type": "text",
+            "at": 12.1,
+            "until": 16.4,
+            "text": "আসল কাজ ⚙️",
+            "x": 48,
+            "y": 48,
+            "w": 20.5,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 16.4,
+            "until": 22.6,
+            "text": "controller = একটা PHP ক্লাস"
+        },
+        {
+            "type": "note",
+            "at": 16.4,
+            "until": 22.6,
+            "text": "class PostController extends Controller",
+            "x": 15,
+            "y": 30,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 19,
+            "until": 22.6,
+            "text": "📂 app/Http/Controllers/PostController.php",
+            "x": 15,
+            "y": 44,
+            "w": 70,
+            "mono": true,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 22.6,
+            "until": 28.6,
+            "text": "একটা বিষয়, একটা controller"
+        },
+        {
+            "type": "box",
+            "at": 22.6,
+            "until": 28.6,
+            "icon": "👔",
+            "text": "PostController",
+            "x": 8,
+            "y": 32,
+            "w": 26,
+            "tone": "accent"
+        },
+        {
+            "type": "box",
+            "at": 22.6,
+            "until": 28.6,
+            "icon": "👔",
+            "text": "UserController",
+            "x": 37,
+            "y": 32,
+            "w": 26
+        },
+        {
+            "type": "box",
+            "at": 22.6,
+            "until": 28.6,
+            "icon": "👔",
+            "text": "CommentController",
+            "x": 66,
+            "y": 32,
+            "w": 26
+        },
+        {
+            "type": "text",
+            "at": 25.6,
+            "until": 28.6,
+            "text": "📝 পোস্টের সব কাজ",
+            "x": 6,
+            "y": 54,
+            "w": 30,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 28.6,
+            "until": 34.3,
+            "text": "প্রতিটা কাজ = একটা মেথড"
+        },
+        {
+            "type": "note",
+            "at": 28.6,
+            "until": 34.3,
+            "text": "class PostController extends Controller {",
+            "x": 12,
+            "y": 24,
+            "w": 76,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 31,
+            "until": 34.3,
+            "text": "    public function index() { … }   // তালিকা",
+            "x": 12,
+            "y": 33,
+            "w": 76,
+            "mono": true,
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 31,
+            "until": 34.3,
+            "text": "    public function show($id) { … }   // একটা পোস্ট",
+            "x": 12,
+            "y": 42,
+            "w": 76,
+            "mono": true,
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 28.6,
+            "until": 34.3,
+            "text": "}",
+            "x": 12,
+            "y": 51,
+            "w": 76,
+            "mono": true
+        },
+        {
+            "type": "label",
+            "at": 34.3,
+            "until": 39.2,
+            "text": "route শুধু পথ দেখায়"
+        },
+        {
+            "type": "note",
+            "at": 34.3,
+            "until": 39.2,
+            "text": "Route::get('/posts', [PostController::class, 'index']);",
+            "x": 10,
+            "y": 32,
+            "w": 80,
+            "mono": true
+        },
+        {
+            "type": "text",
+            "at": 34.3,
+            "until": 39.2,
+            "text": "/posts  👉  PostController-এর index",
+            "x": 15,
+            "y": 46,
+            "w": 70,
+            "tone": "accent"
+        },
+        {
+            "type": "box",
+            "at": 39.2,
+            "until": 42.8,
+            "icon": "👔",
+            "text": "কর্মকর্তা",
+            "x": 41,
+            "y": 30,
+            "w": 18
+        },
+        {
+            "type": "text",
+            "at": 39.2,
+            "until": 42.8,
+            "text": "রিকোয়েস্টের তথ্য কোথায়? 🤔",
+            "x": 25,
+            "y": 54,
+            "w": 50,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 42.8,
+            "until": 47.3,
+            "text": "চাইলেই পেয়ে যান!",
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 42.8,
+            "until": 47.3,
+            "text": "public function store(Request $request)",
+            "x": 15,
+            "y": 32,
+            "w": 70,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "text",
+            "at": 42.8,
+            "until": 47.3,
+            "text": "👆 Laravel নিজেই ভরে দেয়",
+            "x": 15,
+            "y": 46,
+            "w": 70,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 47.3,
+            "until": 53.2,
+            "text": "Service Container"
+        },
+        {
+            "type": "line",
+            "at": 47.3,
+            "until": 53.2,
+            "x": 36,
+            "y": 45.5,
+            "w": 28
+        },
+        {
+            "type": "box",
+            "at": 47.3,
+            "until": 53.2,
+            "icon": "📦",
+            "text": "Service Container",
+            "x": 8,
+            "y": 36,
+            "w": 28,
+            "tone": "accent"
+        },
+        {
+            "type": "box",
+            "at": 47.3,
+            "until": 53.2,
+            "icon": "👔",
+            "text": "store(Request $request)",
+            "x": 64,
+            "y": 36,
+            "w": 30
+        },
+        {
+            "type": "text",
+            "at": 47.3,
+            "until": 50.1,
+            "text": "কী চাইছে? 👀",
+            "x": 36,
+            "y": 34,
+            "w": 28
+        },
+        {
+            "type": "packet",
+            "at": 50.1,
+            "until": 53.2,
+            "text": "🎁 Request",
+            "from": 37,
+            "to": 49,
+            "y": 37,
+            "w": 14,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 53.2,
+            "until": 58.8,
+            "text": "কর্মকর্তার কাজ"
+        },
+        {
+            "type": "line",
+            "at": 53.2,
+            "until": 58.8,
+            "x": 32,
+            "y": 45.5,
+            "w": 5
+        },
+        {
+            "type": "line",
+            "at": 53.2,
+            "until": 58.8,
+            "x": 63,
+            "y": 45.5,
+            "w": 5
+        },
+        {
+            "type": "box",
+            "at": 53.2,
+            "until": 58.8,
+            "icon": "📥",
+            "text": "ফর্মের তথ্য পড়া",
+            "x": 6,
+            "y": 36,
+            "w": 26
+        },
+        {
+            "type": "box",
+            "at": 53.2,
+            "until": 58.8,
+            "icon": "🗄️",
+            "text": "ডেটাবেস থেকে আনা",
+            "x": 37,
+            "y": 36,
+            "w": 26
+        },
+        {
+            "type": "box",
+            "at": 53.2,
+            "until": 58.8,
+            "icon": "📄",
+            "text": "view ফেরত",
+            "x": 68,
+            "y": 36,
+            "w": 26,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 58.8,
+            "until": 65.6,
+            "text": "হাতে লিখতে হয় না"
+        },
+        {
+            "type": "note",
+            "at": 61.3,
+            "until": 72,
+            "text": "$ php artisan make:controller PostController",
+            "x": 12,
+            "y": 32,
+            "w": 76,
+            "mono": true
+        },
+        {
+            "type": "label",
+            "at": 65.6,
+            "until": 72,
+            "text": "Artisan: কমান্ড লাইনের সহকারী 🤖",
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 68.5,
+            "until": 72,
+            "text": "✓ app/Http/Controllers/PostController.php তৈরি",
+            "x": 12,
+            "y": 46,
+            "w": 76,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 72,
+            "until": 82.5,
+            "text": "সাবধান",
+            "tone": "danger"
+        },
+        {
+            "type": "box",
+            "at": 73.8,
+            "until": 78,
+            "icon": "👔",
+            "text": "সমন্বয়কারী, সব কাজের জায়গা নয়",
+            "x": 25,
+            "y": 32,
+            "w": 50,
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 78,
+            "until": 82.5,
+            "text": "public function store(…) { … 150 লাইন … }",
+            "x": 15,
+            "y": 30,
+            "w": 70,
+            "mono": true,
+            "tone": "danger"
+        },
+        {
+            "type": "text",
+            "at": 78,
+            "until": 82.5,
+            "text": "✂️ কাজটা ভাগ করার সময় হয়েছে",
+            "x": 15,
+            "y": 44,
+            "w": 70,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 82.5,
+            "text": "নিজে করে দেখুন 👀",
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 82.5,
+            "text": "$ php artisan make:controller PostController",
+            "x": 10,
+            "y": 28,
+            "w": 80,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 82.5,
+            "text": "Route::get('/posts', [PostController::class, 'index']);",
+            "x": 10,
+            "y": 40,
+            "w": 80,
+            "mono": true,
+            "tone": "ok"
+        }
+    ]
+}

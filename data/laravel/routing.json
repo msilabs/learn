@@ -1,0 +1,645 @@
+{
+    "title": "Route কীভাবে কাজ করে",
+    "description": "/posts খুললে Laravel কীভাবে জানে কোন কোড চালাতে হবে? routes/web.php, GET আর POST, {id} দিয়ে ফাঁকা ঘর, route-এর নাম আর 404, দেড় মিনিটে।",
+    "order": 2,
+    "date": "2026-11-20",
+    "duration": 90,
+    "audio": "/audio/laravel/routing.mp3",
+    "thumb": "/og/laravel/routing.jpg",
+    "captions": [
+        {
+            "t": 0,
+            "text": "Laravel কীভাবে জানে, /posts খুললে কোন কোডটা চালাতে হবে?"
+        },
+        {
+            "t": 5,
+            "text": "উত্তর থাকে routes ফোল্ডারের web.php ফাইলে।"
+        },
+        {
+            "t": 9.1,
+            "text": "এটাই অফিসের রিসেপশন।"
+        },
+        {
+            "t": 11,
+            "text": "এখানে প্রতিটা লাইন একটা নিয়ম, এই ঠিকানায় এলে এই কাজটা করো।"
+        },
+        {
+            "t": 15.2,
+            "text": "যেমন Route::get, /posts, তারপর একটা ফাংশন, যেটা পোস্টের তালিকা ফেরত দেয়।"
+        },
+        {
+            "t": 21.4,
+            "text": "খেয়াল করুন, এখানে শুধু ঠিকানা নয়, রিকোয়েস্টের ধরনও লেখা আছে, GET।"
+        },
+        {
+            "t": 25.9,
+            "text": "কারণ একই ঠিকানায় দুই রকম রিকোয়েস্ট আসতে পারে।"
+        },
+        {
+            "t": 29.7,
+            "text": "তালিকা দেখতে চাইলে GET, আর ফর্ম জমা দিলে POST।"
+        },
+        {
+            "t": 33.3,
+            "text": "রিসেপশন দুটোকে দুই আলাদা কাজের দিকে পাঠাতে পারে।"
+        },
+        {
+            "t": 36.7,
+            "text": "কিন্তু হাজারটা পোস্টের জন্য কি হাজারটা route লিখতে হবে?"
+        },
+        {
+            "t": 40.4,
+            "text": "না!"
+        },
+        {
+            "t": 41.3,
+            "text": "ঠিকানায় একটা ফাঁকা ঘর রাখলেই হয়, যেমন /posts/{id}।"
+        },
+        {
+            "t": 46.4,
+            "text": "/posts/5 খুললে, ওই ঘরে বসে 5, আর ফাংশনটা হাতে পায় সেই সংখ্যা।"
+        },
+        {
+            "t": 52.4,
+            "text": "রিসেপশন ঠিক এভাবেই কাজ করে।"
+        },
+        {
+            "t": 54.6,
+            "text": "5 নম্বর ফাইল চাই শুনে, নম্বরটা লিখে কর্মকর্তার কাছে পাঠায়।"
+        },
+        {
+            "t": 58.9,
+            "text": "প্রতিটা route-কে একটা নামও দেওয়া যায়।"
+        },
+        {
+            "t": 61.3,
+            "text": "তাহলে ঠিকানা বদলালেও পুরো সাইটের লিংক ঠিক থাকে।"
+        },
+        {
+            "t": 64.8,
+            "text": "আর তালিকায় যে ঠিকানা নেই?"
+        },
+        {
+            "t": 66.5,
+            "text": "রিসেপশন সোজা বলে দেয়, 404, এমন কিছু নেই।"
+        },
+        {
+            "t": 70.4,
+            "text": "তবে একটা কথা মনে রাখবেন।"
+        },
+        {
+            "t": 72.3,
+            "text": "route শুধু পথ দেখায়, ভারী কাজের জায়গা এটা নয়।"
+        },
+        {
+            "t": 76.3,
+            "text": "সব কাজ route-এর ফাইলে লিখলে, ফাইলটা দ্রুত জট পাকিয়ে যায়।"
+        },
+        {
+            "t": 80.5,
+            "text": "সেই কাজের জায়গা হলো controller।"
+        },
+        {
+            "t": 82.7,
+            "text": "এখনই চালিয়ে দেখুন, php artisan route:list।"
+        },
+        {
+            "t": 86.9,
+            "text": "আপনার অ্যাপের পুরো রিসেপশন খাতা এক নজরে।"
+        }
+    ],
+    "scene": [
+        {
+            "type": "bar",
+            "at": 0,
+            "until": 5,
+            "text": "example.com/posts/",
+            "y": 19
+        },
+        {
+            "type": "text",
+            "at": 0,
+            "until": 5,
+            "text": "কোন কোডটা চলবে? 🤔",
+            "x": 30,
+            "y": 42,
+            "w": 40,
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 5,
+            "until": 36.7,
+            "text": "📂 routes/web.php",
+            "x": 15,
+            "y": 22,
+            "w": 70
+        },
+        {
+            "type": "box",
+            "at": 9.1,
+            "until": 11,
+            "text": "🚪 ফটক",
+            "x": 1.5,
+            "y": 44,
+            "w": 14.5
+        },
+        {
+            "type": "line",
+            "at": 9.1,
+            "until": 11,
+            "x": 16,
+            "y": 49,
+            "w": 2
+        },
+        {
+            "type": "box",
+            "at": 9.1,
+            "until": 11,
+            "text": "🛎️ রিসেপশন",
+            "x": 18,
+            "y": 44,
+            "w": 14.5,
+            "tone": "accent"
+        },
+        {
+            "type": "line",
+            "at": 9.1,
+            "until": 11,
+            "x": 32.5,
+            "y": 49,
+            "w": 2
+        },
+        {
+            "type": "box",
+            "at": 9.1,
+            "until": 11,
+            "text": "💂 রক্ষী",
+            "x": 34.5,
+            "y": 44,
+            "w": 14.5
+        },
+        {
+            "type": "line",
+            "at": 9.1,
+            "until": 11,
+            "x": 49,
+            "y": 49,
+            "w": 2
+        },
+        {
+            "type": "box",
+            "at": 9.1,
+            "until": 11,
+            "text": "👔 কর্মকর্তা",
+            "x": 51,
+            "y": 44,
+            "w": 14.5
+        },
+        {
+            "type": "line",
+            "at": 9.1,
+            "until": 11,
+            "x": 65.5,
+            "y": 49,
+            "w": 2
+        },
+        {
+            "type": "box",
+            "at": 9.1,
+            "until": 11,
+            "text": "🗄️ রেকর্ড রুম",
+            "x": 67.5,
+            "y": 44,
+            "w": 14.5
+        },
+        {
+            "type": "line",
+            "at": 9.1,
+            "until": 11,
+            "x": 82,
+            "y": 49,
+            "w": 2
+        },
+        {
+            "type": "box",
+            "at": 9.1,
+            "until": 11,
+            "text": "📄 চিঠি",
+            "x": 84,
+            "y": 44,
+            "w": 14.5
+        },
+        {
+            "type": "text",
+            "at": 9.1,
+            "until": 11,
+            "text": "route",
+            "x": 18,
+            "y": 56,
+            "w": 14.5,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 11,
+            "until": 15.2,
+            "text": "প্রতিটা লাইন একটা নিয়ম"
+        },
+        {
+            "type": "note",
+            "at": 11,
+            "until": 15.2,
+            "text": "এই ঠিকানায় এলে 👉 এই কাজটা করো",
+            "x": 20,
+            "y": 40,
+            "w": 60,
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 15.2,
+            "until": 25.9,
+            "text": "Route::get('/posts', function () {",
+            "x": 15,
+            "y": 36,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 15.2,
+            "until": 25.9,
+            "text": "    return 'পোস্টের তালিকা';",
+            "x": 15,
+            "y": 45,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 15.2,
+            "until": 25.9,
+            "text": "});",
+            "x": 15,
+            "y": 54,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "label",
+            "at": 21.4,
+            "until": 25.9,
+            "text": "রিকোয়েস্টের ধরন: GET",
+            "tone": "accent"
+        },
+        {
+            "type": "text",
+            "at": 21.4,
+            "until": 25.9,
+            "text": "👆 get মানে GET রিকোয়েস্ট",
+            "x": 15,
+            "y": 64,
+            "w": 40,
+            "tone": "accent",
+            "align": "left"
+        },
+        {
+            "type": "label",
+            "at": 25.9,
+            "until": 33.3,
+            "text": "একই ঠিকানা, দুই ধরন"
+        },
+        {
+            "type": "note",
+            "at": 25.9,
+            "until": 36.7,
+            "text": "Route::get('/posts', ...);",
+            "x": 6,
+            "y": 38,
+            "w": 50,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 29.7,
+            "until": 36.7,
+            "text": "Route::post('/posts', ...);",
+            "x": 6,
+            "y": 48,
+            "w": 50,
+            "mono": true
+        },
+        {
+            "type": "label",
+            "at": 33.3,
+            "until": 36.7,
+            "text": "দুই আলাদা কাজ",
+            "tone": "accent"
+        },
+        {
+            "type": "text",
+            "at": 33.3,
+            "until": 36.7,
+            "text": "👉 📋 তালিকা দেখানো",
+            "x": 60,
+            "y": 39.5,
+            "w": 36,
+            "tone": "ok",
+            "align": "left"
+        },
+        {
+            "type": "text",
+            "at": 33.3,
+            "until": 36.7,
+            "text": "👉 💾 নতুন পোস্ট জমা",
+            "x": 60,
+            "y": 49.5,
+            "w": 36,
+            "tone": "ok",
+            "align": "left"
+        },
+        {
+            "type": "label",
+            "at": 36.7,
+            "until": 40.4,
+            "text": "হাজারটা পোস্ট?"
+        },
+        {
+            "type": "note",
+            "at": 36.7,
+            "until": 40.4,
+            "text": "Route::get('/posts/1', ...);",
+            "x": 25,
+            "y": 26,
+            "w": 50,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 36.7,
+            "until": 40.4,
+            "text": "Route::get('/posts/2', ...);",
+            "x": 25,
+            "y": 35,
+            "w": 50,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 36.7,
+            "until": 40.4,
+            "text": "Route::get('/posts/3', ...);",
+            "x": 25,
+            "y": 44,
+            "w": 50,
+            "mono": true
+        },
+        {
+            "type": "text",
+            "at": 36.7,
+            "until": 40.4,
+            "text": "… হাজার বার? 😩",
+            "x": 25,
+            "y": 56,
+            "w": 50,
+            "tone": "danger"
+        },
+        {
+            "type": "label",
+            "at": 40.4,
+            "until": 52.4,
+            "text": "ফাঁকা ঘর: {id}",
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 41.3,
+            "until": 52.4,
+            "text": "Route::get('/posts/{id}', function ($id) {",
+            "x": 15,
+            "y": 36,
+            "w": 70,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "bar",
+            "at": 46.4,
+            "until": 52.4,
+            "text": "example.com/posts/5",
+            "y": 19
+        },
+        {
+            "type": "note",
+            "at": 46.4,
+            "until": 52.4,
+            "text": "{id} ঘরে বসল 5  👉  $id = 5",
+            "x": 25,
+            "y": 50,
+            "w": 50,
+            "tone": "accent",
+            "mono": true
+        },
+        {
+            "type": "label",
+            "at": 52.4,
+            "until": 58.9,
+            "text": "রিসেপশনের মতো",
+            "tone": "accent"
+        },
+        {
+            "type": "line",
+            "at": 52.4,
+            "until": 58.9,
+            "x": 30,
+            "y": 49.5,
+            "w": 40
+        },
+        {
+            "type": "box",
+            "at": 52.4,
+            "until": 58.9,
+            "icon": "🛎️",
+            "text": "রিসেপশন",
+            "x": 10,
+            "y": 40,
+            "w": 20,
+            "tone": "accent"
+        },
+        {
+            "type": "box",
+            "at": 52.4,
+            "until": 58.9,
+            "icon": "👔",
+            "text": "কর্মকর্তা",
+            "x": 70,
+            "y": 40,
+            "w": 20
+        },
+        {
+            "type": "text",
+            "at": 52.4,
+            "until": 58.9,
+            "text": "“5 নম্বর ফাইল চাই”",
+            "x": 6,
+            "y": 30,
+            "w": 28
+        },
+        {
+            "type": "packet",
+            "at": 54.6,
+            "until": 58.9,
+            "text": "📝 ফাইল নং 5",
+            "from": 31,
+            "to": 49,
+            "y": 40.5,
+            "w": 20,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 58.9,
+            "until": 64.8,
+            "text": "route-এর নাম 🏷️"
+        },
+        {
+            "type": "note",
+            "at": 58.9,
+            "until": 64.8,
+            "text": "Route::get('/posts/{id}', ...)->name('posts.show');",
+            "x": 12,
+            "y": 30,
+            "w": 76,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 61.3,
+            "until": 64.8,
+            "text": "route('posts.show', 5)  →  /posts/5",
+            "x": 12,
+            "y": 44,
+            "w": 76,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "text",
+            "at": 61.3,
+            "until": 64.8,
+            "text": "ঠিকানা বদলালেও লিংক ঠিক থাকে ✓",
+            "x": 20,
+            "y": 56,
+            "w": 60,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 64.8,
+            "until": 70.4,
+            "text": "তালিকায় নেই?"
+        },
+        {
+            "type": "bar",
+            "at": 64.8,
+            "until": 70.4,
+            "text": "example.com/hello/",
+            "y": 22
+        },
+        {
+            "type": "note",
+            "at": 66.5,
+            "until": 70.4,
+            "title": "🛎️ 404",
+            "text": "এমন কিছু নেই",
+            "x": 35,
+            "y": 44,
+            "w": 30,
+            "tone": "danger"
+        },
+        {
+            "type": "label",
+            "at": 70.4,
+            "until": 82.7,
+            "text": "সাবধান",
+            "tone": "danger"
+        },
+        {
+            "type": "box",
+            "at": 72.3,
+            "until": 76.3,
+            "icon": "🛎️",
+            "text": "route শুধু পথ দেখায় 👉",
+            "x": 30,
+            "y": 32,
+            "w": 40,
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 76.3,
+            "until": 82.7,
+            "text": "📂 web.php-তে সব কাজ? 🧶 জট পাকিয়ে যায়",
+            "x": 20,
+            "y": 30,
+            "w": 60,
+            "tone": "danger"
+        },
+        {
+            "type": "note",
+            "at": 80.5,
+            "until": 82.7,
+            "text": "👔 ভারী কাজের জায়গা: controller",
+            "x": 20,
+            "y": 44,
+            "w": 60,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 82.7,
+            "text": "নিজে দেখুন 👀",
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 82.7,
+            "text": "$ php artisan route:list",
+            "x": 15,
+            "y": 24,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 86.9,
+            "text": "GET|HEAD · posts",
+            "x": 15,
+            "y": 38,
+            "w": 70,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 86.9,
+            "text": "POST · posts",
+            "x": 15,
+            "y": 47,
+            "w": 70,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 86.9,
+            "text": "GET|HEAD · posts/{id} · posts.show",
+            "x": 15,
+            "y": 56,
+            "w": 70,
+            "mono": true,
+            "tone": "ok"
+        }
+    ]
+}

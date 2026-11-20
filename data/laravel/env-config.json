@@ -1,0 +1,722 @@
+{
+    "title": ".env আর config",
+    "description": "ডেটাবেসের পাসওয়ার্ড কোডে লিখে GitHub-এ পুশ করলে কী হয়? .env, .env.example, config ফোল্ডার, config() বনাম env(), আর APP_DEBUG, দেড় মিনিটে।",
+    "order": 6,
+    "date": "2026-11-20",
+    "duration": 92,
+    "audio": "/audio/laravel/env-config.mp3",
+    "thumb": "/og/laravel/env-config.jpg",
+    "captions": [
+        {
+            "t": 0,
+            "text": "ডেটাবেসের পাসওয়ার্ড কোডের ভেতরে লিখে GitHub-এ পুশ করলে কী হয়?"
+        },
+        {
+            "t": 4.8,
+            "text": "যে কেউ রিপোজিটরি খুললেই পাসওয়ার্ডটা দেখে ফেলে।"
+        },
+        {
+            "t": 7.9,
+            "text": "আর এমন পাসওয়ার্ড খুঁজে বেড়ানো স্বয়ংক্রিয় প্রোগ্রামও আছে।"
+        },
+        {
+            "t": 11.5,
+            "text": "Laravel তাই গোপন তথ্য রাখে কোডের বাইরে, .env নামের একটা ফাইলে।"
+        },
+        {
+            "t": 16.8,
+            "text": "অফিসের ভাষায়, এটা ম্যানেজারের তালাবন্ধ ড্রয়ার।"
+        },
+        {
+            "t": 20.2,
+            "text": "চাবি আর পাসওয়ার্ড, সব এখানে।"
+        },
+        {
+            "t": 22.6,
+            "text": "ফাইলটা দেখতে সহজ।"
+        },
+        {
+            "t": 24,
+            "text": "প্রতি লাইনে একটা নাম, সমান চিহ্ন, তারপর তার মান।"
+        },
+        {
+            "t": 28,
+            "text": "আর নতুন প্রজেক্টে Laravel এই ফাইলটাকে আগে থেকেই Git-এর বাইরে রাখে।"
+        },
+        {
+            "t": 32.4,
+            "text": "কিন্তু তাহলে অন্য ডেভেলপার জানবেন কীভাবে, কোন কোন মান লাগবে?"
+        },
+        {
+            "t": 36.9,
+            "text": "এর জন্য আছে .env.example।"
+        },
+        {
+            "t": 39.9,
+            "text": "একই নামগুলো থাকে আসল মান ছাড়া, আর এটা Git-এ যায়।"
+        },
+        {
+            "t": 43.9,
+            "text": "তারপর আছে config ফোল্ডার।"
+        },
+        {
+            "t": 45.9,
+            "text": "এখানে প্রতিটা বিষয়ের সেটিং, যেমন ডেটাবেস, মেইল আর সেশন।"
+        },
+        {
+            "t": 50.3,
+            "text": "আর মজার ব্যাপার হলো, config ফাইলগুলো মান পড়ে .env থেকেই!"
+        },
+        {
+            "t": 55,
+            "text": "তাই একই কোড আপনার ল্যাপটপে এক ডেটাবেসে চলে, সার্ভারে আরেকটায়।"
+        },
+        {
+            "t": 59.7,
+            "text": "বদলায় শুধু .env।"
+        },
+        {
+            "t": 61.6,
+            "text": "কোডের ভেতরে মান পড়বেন config() ফাংশন দিয়ে, যেমন config('app.name')।"
+        },
+        {
+            "t": 66.8,
+            "text": "env() ফাংশন লিখবেন শুধু config ফাইলের ভেতরে।"
+        },
+        {
+            "t": 69.9,
+            "text": "কারণ সার্ভারে config cache করা হলে, বাইরে এটা আর মান পায় না।"
+        },
+        {
+            "t": 74.2,
+            "text": "তবে একটা কথা মনে রাখবেন।"
+        },
+        {
+            "t": 76.1,
+            "text": ".env-এ আছে APP_DEBUG নামের একটা সেটিং।"
+        },
+        {
+            "t": 79.2,
+            "text": "এটা চালু থাকলে, কোনো ভুলে পুরো খুঁটিনাটি পর্দায় আসে, কখনো গোপন তথ্যসহ।"
+        },
+        {
+            "t": 84.8,
+            "text": "লাইভ সার্ভারে এটা সবসময় false রাখুন।"
+        },
+        {
+            "t": 87.7,
+            "text": "এখনই নিজের .env খুলে দেখুন, ডেটাবেসের সেটিং কোন লাইনগুলোতে।"
+        }
+    ],
+    "scene": [
+        {
+            "type": "note",
+            "at": 0,
+            "until": 11.5,
+            "text": "$password = 'secret123';",
+            "x": 4,
+            "y": 30,
+            "w": 36,
+            "mono": true,
+            "tone": "danger"
+        },
+        {
+            "type": "packet",
+            "at": 0,
+            "until": 11.5,
+            "text": "📤 push",
+            "from": 41,
+            "to": 50,
+            "y": 30.5,
+            "w": 18
+        },
+        {
+            "type": "box",
+            "at": 0,
+            "until": 11.5,
+            "icon": "☁️",
+            "text": "GitHub",
+            "x": 70,
+            "y": 26,
+            "w": 22
+        },
+        {
+            "type": "text",
+            "at": 4.8,
+            "until": 11.5,
+            "text": "👀 যে কেউ দেখে",
+            "x": 66,
+            "y": 47,
+            "w": 30,
+            "tone": "danger"
+        },
+        {
+            "type": "box",
+            "at": 7.9,
+            "until": 11.5,
+            "icon": "🤖",
+            "text": "পাসওয়ার্ড খোঁজা প্রোগ্রাম",
+            "x": 36,
+            "y": 54,
+            "w": 30,
+            "tone": "danger"
+        },
+        {
+            "type": "label",
+            "at": 11.5,
+            "until": 16.8,
+            "text": ".env: কোডের বাইরে",
+            "tone": "ok"
+        },
+        {
+            "type": "line",
+            "at": 11.5,
+            "until": 16.8,
+            "x": 40,
+            "y": 45.5,
+            "w": 20,
+            "dashed": true
+        },
+        {
+            "type": "box",
+            "at": 11.5,
+            "until": 16.8,
+            "icon": "📂",
+            "text": "কোড",
+            "x": 12,
+            "y": 36,
+            "w": 28
+        },
+        {
+            "type": "box",
+            "at": 11.5,
+            "until": 16.8,
+            "icon": "🔐",
+            "text": ".env",
+            "x": 60,
+            "y": 36,
+            "w": 28,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 16.8,
+            "until": 22.6,
+            "text": "ম্যানেজারের তালাবন্ধ ড্রয়ার",
+            "tone": "accent"
+        },
+        {
+            "type": "box",
+            "at": 16.8,
+            "until": 22.6,
+            "icon": "🔐",
+            "text": "তালাবন্ধ ড্রয়ার",
+            "x": 36,
+            "y": 28,
+            "w": 28,
+            "tone": "accent"
+        },
+        {
+            "type": "text",
+            "at": 20.2,
+            "until": 22.6,
+            "text": "🔑 চাবি · 🔒 পাসওয়ার্ড",
+            "x": 25,
+            "y": 54,
+            "w": 50
+        },
+        {
+            "type": "label",
+            "at": 22.6,
+            "until": 28,
+            "text": ".env দেখতে সহজ"
+        },
+        {
+            "type": "note",
+            "at": 22.6,
+            "until": 28,
+            "text": "📂 .env",
+            "x": 20,
+            "y": 20,
+            "w": 60
+        },
+        {
+            "type": "note",
+            "at": 24,
+            "until": 28,
+            "text": "APP_NAME=Laravel",
+            "x": 20,
+            "y": 30,
+            "w": 60,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 24,
+            "until": 28,
+            "text": "DB_DATABASE=blog",
+            "x": 20,
+            "y": 39,
+            "w": 60,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 24,
+            "until": 28,
+            "text": "DB_PASSWORD=secret123",
+            "x": 20,
+            "y": 48,
+            "w": 60,
+            "mono": true
+        },
+        {
+            "type": "text",
+            "at": 24,
+            "until": 28,
+            "text": "নাম = মান",
+            "x": 20,
+            "y": 60,
+            "w": 60,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 28,
+            "until": 32.4,
+            "text": "Git-এর বাইরে"
+        },
+        {
+            "type": "note",
+            "at": 28,
+            "until": 32.4,
+            "text": "📂 .gitignore",
+            "x": 20,
+            "y": 28,
+            "w": 60
+        },
+        {
+            "type": "note",
+            "at": 28,
+            "until": 32.4,
+            "text": ".env",
+            "x": 20,
+            "y": 37,
+            "w": 60,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "text",
+            "at": 28,
+            "until": 32.4,
+            "text": "✓ নতুন প্রজেক্টে আগে থেকেই",
+            "x": 20,
+            "y": 50,
+            "w": 60,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 32.4,
+            "until": 36.9,
+            "text": "অন্য ডেভেলপার জানবেন কীভাবে?"
+        },
+        {
+            "type": "box",
+            "at": 32.4,
+            "until": 36.9,
+            "icon": "🧑‍💻",
+            "text": "নতুন ডেভেলপার",
+            "x": 36,
+            "y": 28,
+            "w": 28
+        },
+        {
+            "type": "text",
+            "at": 32.4,
+            "until": 36.9,
+            "text": "কোন কোন মান লাগবে? 🤔",
+            "x": 25,
+            "y": 54,
+            "w": 50,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 36.9,
+            "until": 43.9,
+            "text": ".env.example",
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 36.9,
+            "until": 43.9,
+            "text": "📂 .env.example  ✓ Git-এ যায়",
+            "x": 6,
+            "y": 24,
+            "w": 42,
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 39.9,
+            "until": 43.9,
+            "text": "DB_DATABASE=",
+            "x": 6,
+            "y": 34,
+            "w": 42,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 39.9,
+            "until": 43.9,
+            "text": "DB_PASSWORD=",
+            "x": 6,
+            "y": 43,
+            "w": 42,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 39.9,
+            "until": 43.9,
+            "text": "🔐 .env  ✗ Git-এ যায় না",
+            "x": 52,
+            "y": 24,
+            "w": 42,
+            "tone": "danger"
+        },
+        {
+            "type": "note",
+            "at": 39.9,
+            "until": 43.9,
+            "text": "DB_DATABASE=blog",
+            "x": 52,
+            "y": 34,
+            "w": 42,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 39.9,
+            "until": 43.9,
+            "text": "DB_PASSWORD=secret123",
+            "x": 52,
+            "y": 43,
+            "w": 42,
+            "mono": true
+        },
+        {
+            "type": "text",
+            "at": 39.9,
+            "until": 43.9,
+            "text": "একই নাম, আসল মান ছাড়া",
+            "x": 6,
+            "y": 54,
+            "w": 42,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 43.9,
+            "until": 50.3,
+            "text": "config ফোল্ডার"
+        },
+        {
+            "type": "note",
+            "at": 43.9,
+            "until": 50.3,
+            "text": "📂 config/",
+            "x": 20,
+            "y": 24,
+            "w": 60,
+            "mono": true
+        },
+        {
+            "type": "box",
+            "at": 45.9,
+            "until": 50.3,
+            "text": "🛢️ database.php",
+            "x": 6,
+            "y": 38,
+            "w": 26
+        },
+        {
+            "type": "box",
+            "at": 45.9,
+            "until": 50.3,
+            "text": "✉️ mail.php",
+            "x": 37,
+            "y": 38,
+            "w": 26
+        },
+        {
+            "type": "box",
+            "at": 45.9,
+            "until": 50.3,
+            "text": "🎫 session.php",
+            "x": 68,
+            "y": 38,
+            "w": 26
+        },
+        {
+            "type": "label",
+            "at": 50.3,
+            "until": 55,
+            "text": "config পড়ে .env থেকে!",
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 50.3,
+            "until": 55,
+            "text": "'database' => env('DB_DATABASE', 'laravel'),",
+            "x": 10,
+            "y": 28,
+            "w": 80,
+            "mono": true
+        },
+        {
+            "type": "line",
+            "at": 50.3,
+            "until": 55,
+            "x": 32,
+            "y": 51,
+            "w": 7
+        },
+        {
+            "type": "line",
+            "at": 50.3,
+            "until": 55,
+            "x": 61,
+            "y": 51,
+            "w": 7
+        },
+        {
+            "type": "box",
+            "at": 50.3,
+            "until": 55,
+            "text": "🔐 .env",
+            "x": 10,
+            "y": 46,
+            "w": 22,
+            "tone": "accent"
+        },
+        {
+            "type": "box",
+            "at": 50.3,
+            "until": 55,
+            "text": "📂 config",
+            "x": 39,
+            "y": 46,
+            "w": 22
+        },
+        {
+            "type": "box",
+            "at": 50.3,
+            "until": 55,
+            "text": "⚙️ অ্যাপ",
+            "x": 68,
+            "y": 46,
+            "w": 22
+        },
+        {
+            "type": "label",
+            "at": 55,
+            "until": 61.6,
+            "text": "একই কোড, আলাদা .env"
+        },
+        {
+            "type": "box",
+            "at": 55,
+            "until": 61.6,
+            "icon": "💻",
+            "text": "ল্যাপটপ: DB_DATABASE=blog_local",
+            "x": 6,
+            "y": 30,
+            "w": 42
+        },
+        {
+            "type": "box",
+            "at": 55,
+            "until": 61.6,
+            "icon": "🖥️",
+            "text": "সার্ভার: DB_DATABASE=blog_live",
+            "x": 52,
+            "y": 30,
+            "w": 42
+        },
+        {
+            "type": "text",
+            "at": 59.7,
+            "until": 61.6,
+            "text": "বদলায় শুধু .env ✓",
+            "x": 25,
+            "y": 56,
+            "w": 50,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 61.6,
+            "until": 66.8,
+            "text": "কোডে: config()",
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 61.6,
+            "until": 66.8,
+            "text": "config('app.name')   👉   'Laravel'",
+            "x": 15,
+            "y": 34,
+            "w": 70,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 66.8,
+            "until": 74.2,
+            "text": "env() শুধু config ফাইলে"
+        },
+        {
+            "type": "note",
+            "at": 66.8,
+            "until": 74.2,
+            "text": "✓ config/app.php:  env('APP_NAME')",
+            "x": 15,
+            "y": 26,
+            "w": 70,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 66.8,
+            "until": 74.2,
+            "text": "✗ controller-এ:  env('APP_NAME')",
+            "x": 15,
+            "y": 35,
+            "w": 70,
+            "mono": true,
+            "tone": "danger"
+        },
+        {
+            "type": "note",
+            "at": 69.9,
+            "until": 74.2,
+            "text": "$ php artisan config:cache",
+            "x": 25,
+            "y": 48,
+            "w": 50,
+            "mono": true
+        },
+        {
+            "type": "text",
+            "at": 69.9,
+            "until": 74.2,
+            "text": "তারপর বাইরে env() আর মান পায় না",
+            "x": 15,
+            "y": 60,
+            "w": 70,
+            "tone": "danger"
+        },
+        {
+            "type": "label",
+            "at": 74.2,
+            "until": 87.7,
+            "text": "সাবধান",
+            "tone": "danger"
+        },
+        {
+            "type": "note",
+            "at": 76.1,
+            "until": 87.7,
+            "text": "APP_DEBUG=true",
+            "x": 30,
+            "y": 28,
+            "w": 40,
+            "mono": true,
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 79.2,
+            "until": 87.7,
+            "text": "💥 ভুল হলে পুরো খুঁটিনাটি পর্দায়, কখনো গোপন তথ্যসহ",
+            "x": 15,
+            "y": 42,
+            "w": 70,
+            "tone": "danger"
+        },
+        {
+            "type": "note",
+            "at": 84.8,
+            "until": 87.7,
+            "text": "লাইভ সার্ভারে:  APP_DEBUG=false",
+            "x": 25,
+            "y": 54,
+            "w": 50,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 87.7,
+            "text": "নিজে দেখুন 👀",
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 87.7,
+            "text": "📂 .env",
+            "x": 20,
+            "y": 20,
+            "w": 60
+        },
+        {
+            "type": "note",
+            "at": 87.7,
+            "text": "DB_CONNECTION=mysql",
+            "x": 20,
+            "y": 30,
+            "w": 60,
+            "mono": true,
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 87.7,
+            "text": "DB_HOST=127.0.0.1",
+            "x": 20,
+            "y": 39,
+            "w": 60,
+            "mono": true,
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 87.7,
+            "text": "DB_DATABASE=laravel",
+            "x": 20,
+            "y": 48,
+            "w": 60,
+            "mono": true,
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 87.7,
+            "text": "DB_USERNAME=root",
+            "x": 20,
+            "y": 57,
+            "w": 60,
+            "mono": true,
+            "tone": "accent"
+        }
+    ]
+}
