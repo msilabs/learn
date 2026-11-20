@@ -21,13 +21,15 @@
 
 | ফাইল | কে বানায় | কী থাকে |
 | --- | --- | --- |
-| `drafts/<course>/<slug>.md` | Claude | পাঠের উৎস: voice, caption, দৃশ্য |
-| `drafts/<course>/<slug>.voice.txt` | `tools/lesson.mjs voice` | চূড়ান্ত script, ড্রাফটের voice থেকে |
+| `drafts/<course>/<NN>-<slug>/<slug>.md` | Claude | পাঠের উৎস: voice, caption, দৃশ্য |
+| `drafts/<course>/<NN>-<slug>/<slug>.voice.txt` | `tools/lesson.mjs voice` | চূড়ান্ত script, ড্রাফটের voice থেকে |
 | `public/og/<course>/<slug>.jpg` | `tools/lesson.mjs og` | thumbnail আর শেয়ারের ছবি, ১২০০×৬৩০ |
 | `public/audio/<course>/<slug>.mp3` | মালিক বানান, Claude ছোট করে | অডিও, 64 kbps mono MP3 |
 | `data/<course>/<slug>.json` | `tools/lesson.mjs sync` | সাইট যা পড়ে |
 
 - `slug` হবে ছোট হাতের ইংরেজি, kebab-case (`https`, `dns-lookup`)।
+- প্রতিটা পাঠের ড্রাফট নিজের ফোল্ডারে, নামের শুরুতে দুই অঙ্কের ক্রম: `drafts/web/03-https/`। নম্বর শুধু ফোল্ডার সাজানোর জন্য; URL, অডিও, ছবি আর JSON-এ থাকে শুধু `slug`। টুলের কমান্ডেও শুধু `slug` লেখো (`sync web https`), ফোল্ডার টুল নিজেই খুঁজে নেয়।
+- মাঝে নতুন পাঠ ঢোকালে শুধু ফোল্ডারের নম্বর আর ড্রাফটের `order` বদলাও। URL বদলায় না।
 - কোনো component লিখতে হয় না।
 
 ## কাজের ধাপ
@@ -63,7 +65,7 @@
 
 মালিক অডিও রেখেছেন বললে:
 
-1. **ড্রাফট লেখো:** `drafts/<course>/<slug>.md`, নিচের "ড্রাফটের format" মেনে।
+1. **ড্রাফট লেখো:** `drafts/<course>/<NN>-<slug>/<slug>.md`, নিচের "ড্রাফটের format" মেনে।
    - voice হবে হুবহু চূড়ান্ত script, মালিক বদলে থাকলে সেই বদলসহ। এক অক্ষরও নিজে বদলাবে না।
    - caption, দৃশ্য আর frontmatter লেখো চূড়ান্ত লেখা দেখে।
    - মালিকের লেখায় তথ্যগত ভুল চোখে পড়লে চুপচাপ ঠিক করবে না, মালিককে জানাবে।
@@ -92,7 +94,7 @@
 
 ## Script কীভাবে লিখবে
 
-HTTPS পাঠের চূড়ান্ত script মালিক নিজে ঠিক করেছেন। নতুন script-এর আদর্শ ওইটাই: [drafts/web/https.voice.txt](drafts/web/https.voice.txt)। লেখার আগে একবার পড়ে নাও।
+HTTPS পাঠের চূড়ান্ত script মালিক নিজে ঠিক করেছেন। নতুন script-এর আদর্শ ওইটাই: [drafts/web/03-https/https.voice.txt](drafts/web/03-https/https.voice.txt)। লেখার আগে একবার পড়ে নাও।
 
 ### দৈর্ঘ্য
 

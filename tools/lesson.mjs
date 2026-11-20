@@ -1,5 +1,6 @@
-// Lesson tool: builds everything from drafts/<course>/<slug>.md.
-//   node tools/lesson.mjs voice <course> <slug>   -> drafts/<course>/<slug>.voice.txt
+// Lesson tool: builds everything from drafts/<course>/<NN>-<slug>/<slug>.md.
+// The number in the folder name only orders the drafts; it never reaches URLs or file names.
+//   node tools/lesson.mjs voice <course> <slug>   -> drafts/<course>/<NN>-<slug>/<slug>.voice.txt
 //   node tools/lesson.mjs og <course> <slug>      -> public/og/<course>/<slug>.jpg (needs Google Chrome, macOS sips)
 //   node tools/lesson.mjs og <course>             -> public/og/<course>.jpg, the course share image
 //   node tools/lesson.mjs sync <course> <slug>    -> data/<course>/<slug>.json (needs macOS afconvert)
@@ -8,7 +9,7 @@
 // sentences; every sentence becomes one caption with its own time, measured from the audio.
 // Scene times refer to a paragraph ("L3") or to a sentence inside it ("L3.2").
 
-import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync, readdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -22,8 +23,9 @@ if (!['voice', 'og', 'sync'].includes(cmd) || !course || (!slug && !courseOnly))
     process.exit(1);
 }
 
-const draftPath = `drafts/${course}/${slug}.md`;
-const voicePath = `drafts/${course}/${slug}.voice.txt`;
+const lessonDir = slug ? findLessonDir() : null;
+const draftPath = `${lessonDir}/${slug}.md`;
+const voicePath = `${lessonDir}/${slug}.voice.txt`;
 const audioPath = `public/audio/${course}/${slug}.mp3`;
 const ogPath = `public/og/${course}/${slug}.jpg`;
 const dataPath = `data/${course}/${slug}.json`;
@@ -42,6 +44,16 @@ if (cmd === 'sync') sync();
 function fail(message) {
     console.error(`error: ${message}`);
     process.exit(1);
+}
+
+function findLessonDir() {
+    const root = `drafts/${course}`;
+    const dirs = existsSync(root)
+        ? readdirSync(root, { withFileTypes: true }).filter((d) => d.isDirectory() && d.name.replace(/^\d+-/, '') === slug)
+        : [];
+    if (dirs.length === 0) fail(`no lesson folder for "${slug}" in ${root}/ (expected ${root}/<NN>-${slug}/)`);
+    if (dirs.length > 1) fail(`more than one lesson folder for "${slug}": ${dirs.map((d) => d.name).join(', ')}`);
+    return `${root}/${dirs[0].name}`;
 }
 
 // expression tags like [curious] are read by ElevenLabs, not spoken
