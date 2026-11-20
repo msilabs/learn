@@ -10,10 +10,9 @@
     {
         "id": "laravel",
         "title": "Laravel for Beginners",
-        "description": "যারা প্রথমবার backend কোড লিখছেন তাদের জন্য Laravel সিরিজ। syntax-এর আগে framework-এর ভেতরের ধারণাগুলো পরিষ্কার করা হবে।",
+        "description": "PHP জানেন? এবার Laravel-এর ভেতরের ধারণাগুলো পরিষ্কার করুন: request, route, controller, model, middleware, ছোট ছোট animated পাঠে।",
         "topic": "Laravel",
         "color": "coral",
-        "icon": "🧱",
-        "status": "soon"
+        "icon": "🧱"
     }
 ]
