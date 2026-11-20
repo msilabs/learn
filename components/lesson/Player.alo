@@ -2,7 +2,7 @@
      দৃশ্য আসে <slot />-এ; ক্যাপশন আসে props.lesson.captions থেকে।
      বাইরের সাথে কথা বলে দুটো event দিয়ে: lesson:time (সময় জানায়) আর lesson:seek (সময়ে যেতে বলে)। -->
 <template>
-    <div class="player idle" data-duration="{{ props.lesson.duration }}" data-key="{{ props.lesson.audio }}">
+    <div class="player idle" data-duration="{{ props.lesson.duration }}">
         <div class="stage">
             <slot />
             <template for="(c, i) in props.lesson.captions">
@@ -109,7 +109,6 @@
     const seek = $el.querySelector('.seek');
     const timeEl = $el.querySelector('.time');
     const ccBtn = $el.querySelector('.cc');
-    const storeKey = 'learn:pos:' + $el.dataset.key;
     let duration = Number($el.dataset.duration);
 
     const cues = [...stage.querySelectorAll('[data-at]')].map((el) => ({
@@ -139,16 +138,22 @@
         useAudio = false;
     });
 
-    let restored = false;
+    // metadata আসার আগে currentTime বসালে টেকে না, তাই কোন সময়ে যেতে হবে সেটা এখানে জমা থাকে
+    let pendingTime = null;
+    let resumePlaying = false;
+
     audio.addEventListener('loadedmetadata', () => {
         if (isFinite(audio.duration)) {
             duration = audio.duration;
             seek.max = duration;
         }
-        if (!restored && audio.src.startsWith('blob:')) {
-            restored = true;
-            const saved = Number(readStore(storeKey));
-            if (saved > 3 && saved < duration - 3) audio.currentTime = saved;
+        if (pendingTime !== null) {
+            audio.currentTime = Math.min(pendingTime, duration);
+            pendingTime = null;
+        }
+        if (resumePlaying) {
+            resumePlaying = false;
+            audio.play().catch(() => {});
         }
     });
 
@@ -156,6 +161,10 @@
     fetch(audio.src)
         .then((res) => (res.ok ? res.blob() : Promise.reject(res.status)))
         .then((blob) => {
+            // ততক্ষণে অডিও চালু হয়ে গেলে src বদলালে অবস্থান হারায়, তাই সেটা ধরে রেখে পরে আবার বসানো হয়
+            if (audio.readyState > 0) pendingTime = audio.currentTime;
+            resumePlaying = !audio.paused;
+            audio.preload = 'auto';
             audio.src = URL.createObjectURL(new Blob([blob], { type: 'audio/mpeg' }));
         })
         .catch(() => {
@@ -165,12 +174,14 @@
 
     const clock = {
         get time() {
-            return useAudio ? audio.currentTime : fallback.time;
+            if (!useAudio) return fallback.time;
+            return pendingTime ?? audio.currentTime;
         },
         set time(v) {
             v = Math.max(0, Math.min(duration, v));
-            if (useAudio) audio.currentTime = v;
-            else fallback.time = v;
+            if (!useAudio) fallback.time = v;
+            else if (audio.readyState === 0) pendingTime = v;
+            else audio.currentTime = v;
         },
         get playing() {
             return useAudio ? !audio.paused && !audio.ended : fallback.playing;
@@ -184,7 +195,6 @@
 
     let seeking = false;
     let lastSent = -1;
-    let lastSaved = 0;
     function render() {
         const t = clock.time;
         for (const c of cues) c.el.classList.toggle('on', t >= c.at && t < c.until);
@@ -199,10 +209,6 @@
         if (Math.abs(t - lastSent) >= 0.25) {
             lastSent = t;
             document.dispatchEvent(new CustomEvent('lesson:time', { detail: t }));
-        }
-        if (clock.playing && Math.abs(t - lastSaved) > 2) {
-            lastSaved = t;
-            writeStore(storeKey, clock.ended ? 0 : t.toFixed(1));
         }
     }
 
@@ -235,15 +241,12 @@
     function pause() {
         if (!useAudio) fallback.playing = false;
         else audio.pause();
-        writeStore(storeKey, clock.time.toFixed(1));
     }
 
     function toggle() {
         if (clock.playing) pause();
         else play();
     }
-
-    audio.addEventListener('ended', () => writeStore(storeKey, 0));
 
     playBtn.addEventListener('click', toggle);
     $el.querySelector('.big').addEventListener('click', (e) => {
@@ -264,9 +267,12 @@
     seek.addEventListener('change', () => {
         seeking = false;
     });
+    // defaultPlaybackRate-ও বসানো হয়, কারণ src বদলালে ব্রাউজার playbackRate সেখান থেকে আবার নেয়
     $el.querySelector('.rate').addEventListener('change', (e) => {
-        audio.playbackRate = Number(e.target.value);
-        fallback.rate = Number(e.target.value);
+        const rate = Number(e.target.value);
+        audio.defaultPlaybackRate = rate;
+        audio.playbackRate = rate;
+        fallback.rate = rate;
     });
 
     function toggleCaptions() {
@@ -295,8 +301,10 @@
     });
 
     document.addEventListener('keydown', (e) => {
-        if (['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON'].includes(e.target.tagName) || e.metaKey || e.ctrlKey || e.altKey) return;
+        if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName) || e.metaKey || e.ctrlKey || e.altKey) return;
         const key = e.key.toLowerCase();
+        // বোতামে focus থাকলে Space আর Enter বোতামের নিজের কাজ করে
+        if (e.target.tagName === 'BUTTON' && (key === ' ' || key === 'enter')) return;
         if (key === ' ' || key === 'k') {
             e.preventDefault();
             toggle();
