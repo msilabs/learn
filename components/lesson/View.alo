@@ -53,6 +53,13 @@
                                     </template>
                                 </ol>
                             </div>
+                            <template for="sim in data.interactive.filter((s) => (s.lessons ?? []).includes(course.id + '/' + props.lesson.slug))">
+                                <a class="panel try" href="{{ sim.href }}" target="_blank" rel="noopener">
+                                    <span class="tl">নিজে করে দেখুন</span>
+                                    <b>{{ sim.icon }} {{ sim.name }} ↗</b>
+                                    <span>{{ sim.description }}</span>
+                                </a>
+                            </template>
                             <nav class="pager" aria-label="পাঠ">
                                 <template if="i > 0">
                                     <a href="/{{ course.id }}/{{ lessons[i - 1].slug }}/"><span>← আগের পাঠ</span><b>{{ lessons[i - 1].title }}</b></a>
@@ -101,6 +108,11 @@
     .toc .n{font:600 13px/1 var(--mono);color:var(--dim)}
     .toc a.cur .n{color:var(--mint)}
     .toc .d{font:500 12.5px/1 var(--mono);color:var(--dim)}
+    .try{display:grid;gap:8px;text-decoration:none;color:var(--muted);font-size:15px}
+    .try .tl{font-size:13.5px;font-weight:600;color:var(--mint)}
+    .try b{font-size:17px;color:var(--text)}
+    .try:hover{border-color:rgba(30,214,168,.35)}
+    .try:hover b{color:var(--mint)}
     .pager{display:grid;gap:12px}
     .pager a{display:flex;flex-direction:column;gap:4px;padding:16px 18px;border-radius:16px;background:var(--surface);border:1px solid var(--border);text-decoration:none;color:var(--text)}
     .pager a:hover{border-color:rgba(30,214,168,.35)}

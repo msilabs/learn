@@ -1,5 +1,5 @@
 <template>
-    <a class="card rv" href="/{{ props.course.id }}/" data-topic="{{ props.course.topic }}">
+    <a class="card rv" href="/{{ props.course.id }}/">
         <Cover
             color="{{ props.course.color }}"
             icon="{{ props.course.icon }}"

@@ -11,114 +11,79 @@
 
 <template>
     <template for="all in [data.courses.flatMap((c) => (data[c.id] ?? []).map((l) => ({ lesson: l, course: c })))]">
-        <section class="hero">
-            <div class="wrap grid">
-                <div class="rv">
-                    <span class="eyebrow">msilabs শিখুন</span>
-                    <h1>দেখে, শুনে আর <span class="grad">হাতে-কলমে</span> শিখুন।</h1>
-                    <p class="lead">বাংলায় ছোট ছোট animated পাঠ। প্রতিটা পাঠ সাধারণ HTML, ভিডিও নয়: লেখা সিলেক্ট করা যায়, গতি বদলানো যায়, আর পুরো স্ক্রিপ্ট সাথেই থাকে।</p>
-                    <div class="cta">
-                        <template for="x in all.toSorted((a, b) => b.lesson.date.localeCompare(a.lesson.date)).slice(0, 1)">
-                            <a class="btn btn-primary" href="/{{ x.course.id }}/{{ x.lesson.slug }}/">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
-                                সর্বশেষ পাঠ দেখুন
-                            </a>
-                        </template>
-                        <a class="btn btn-ghost" href="#courses">সব course</a>
-                    </div>
-                    <dl class="stats">
-                        <div><dt>পাঠ</dt><dd><Bn value="{{ all.length }}" /></dd></div>
-                        <div><dt>course</dt><dd><Bn value="{{ data.courses.length }}" /></dd></div>
-                        <div><dt>simulator</dt><dd><Bn value="{{ data.interactive.length }}" /></dd></div>
-                        <div><dt>দাম</dt><dd>ফ্রি</dd></div>
-                    </dl>
-                </div>
-
-                <template for="x in all.toSorted((a, b) => b.lesson.date.localeCompare(a.lesson.date)).slice(0, 1)">
-                    <a class="feature rv" href="/{{ x.course.id }}/{{ x.lesson.slug }}/">
-                        <span class="ring" aria-hidden="true"></span>
-                        <Cover color="{{ x.course.color }}" icon="{{ x.course.icon }}" thumb="{{ x.lesson.thumb }}" seconds="{{ x.lesson.duration }}" />
-                        <div class="fbody">
-                            <span class="chip new">নতুন পাঠ</span>
-                            <h2>{{ x.lesson.title }}</h2>
-                            <p>{{ x.course.title }} · {{ x.lesson.description }}</p>
+        <!-- সর্বশেষ পাঠ: নতুন তারিখ আগে; তারিখ সমান হলে পরে যোগ হওয়া course, তার ভেতরে প্রথম পাঠ -->
+        <template for="newest in [all.toSorted((a, b) => b.lesson.date.localeCompare(a.lesson.date) || data.courses.indexOf(b.course) - data.courses.indexOf(a.course) || a.lesson.order - b.lesson.order).slice(0, 1)]">
+            <section class="hero">
+                <div class="wrap grid">
+                    <div class="rv">
+                        <span class="eyebrow">msilabs শিখুন</span>
+                        <h1>দেখে, শুনে আর <span class="grad">হাতে-কলমে</span> শিখুন।</h1>
+                        <p class="lead">বাংলায় ছোট ছোট animated পাঠ, একেকটা দেড় মিনিটের মতো। পর্দার কোড কপি করা যায়, আর মোবাইল ডেটা প্রায় লাগে না।</p>
+                        <div class="cta">
+                            <template for="x in newest">
+                                <a class="btn btn-primary" href="/{{ x.course.id }}/{{ x.lesson.slug }}/">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
+                                    সর্বশেষ পাঠ দেখুন
+                                </a>
+                            </template>
+                            <a class="btn btn-ghost" href="#courses">সব course</a>
                         </div>
-                    </a>
-                </template>
-            </div>
-        </section>
-
-        <section class="why">
-            <div class="wrap grid-3">
-                <div class="tile rv">
-                    <span class="ic" aria-hidden="true">&lt;/&gt;</span>
-                    <h3>ভিডিও নয়, HTML</h3>
-                    <p>পর্দার প্রতিটা লেখা আসল লেখা। সিলেক্ট করুন, কপি করুন, অনুবাদ করুন। ডাউনলোড শুধু একটা ছোট অডিও।</p>
-                </div>
-                <div class="tile rv">
-                    <span class="ic" aria-hidden="true">1.5x</span>
-                    <h3>নিজের গতিতে</h3>
-                    <p>গতি বদলান, ৫ সেকেন্ড পিছিয়ে যান। যেখানে থেমেছিলেন, পরের বার সেখান থেকেই শুরু হয়।</p>
-                </div>
-                <div class="tile rv">
-                    <span class="ic" aria-hidden="true">¶</span>
-                    <h3>পুরো স্ক্রিপ্ট সাথে</h3>
-                    <p>প্রতিটা পাঠের নিচে পুরো স্ক্রিপ্ট। যেকোনো লাইনে ক্লিক করলে পাঠ সেখান থেকে চলে।</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="courses" class="section">
-            <div class="wrap">
-                <div class="section-head">
-                    <div>
-                        <span class="eyebrow">Course</span>
-                        <h2>ধাপে ধাপে সাজানো পাঠ</h2>
-                        <p>প্রতিটা course কয়েকটা ছোট পাঠে ভাগ করা। একটা পাঠ এক থেকে পাঁচ মিনিটের।</p>
+                        <dl class="stats">
+                            <div><dt>পাঠ</dt><dd><Bn value="{{ all.length }}" /></dd></div>
+                            <div><dt>course</dt><dd><Bn value="{{ data.courses.length }}" /></dd></div>
+                            <div><dt>simulator</dt><dd><Bn value="{{ data.interactive.length }}" /></dd></div>
+                            <div><dt>দাম</dt><dd>ফ্রি</dd></div>
+                        </dl>
                     </div>
-                    <div class="filters" role="group" aria-label="বিষয় অনুযায়ী ফিল্টার">
-                        <button type="button" class="fchip on" data-filter="" aria-pressed="true">সব</button>
-                        <template for="topic in [...new Set(data.courses.map((c) => c.topic))]">
-                            <button type="button" class="fchip" data-filter="{{ topic }}" aria-pressed="false">{{ topic }}</button>
+
+                    <template for="x in newest">
+                        <a class="feature rv" href="/{{ x.course.id }}/{{ x.lesson.slug }}/">
+                            <span class="ring" aria-hidden="true"></span>
+                            <Cover color="{{ x.course.color }}" icon="{{ x.course.icon }}" thumb="{{ x.lesson.thumb }}" seconds="{{ x.lesson.duration }}" />
+                            <div class="fbody">
+                                <span class="chip new">নতুন পাঠ</span>
+                                <h2>{{ x.lesson.title }}</h2>
+                                <p>{{ x.course.title }} · {{ x.lesson.description }}</p>
+                            </div>
+                        </a>
+                    </template>
+                </div>
+            </section>
+
+            <section id="courses" class="section">
+                <div class="wrap">
+                    <div class="section-head">
+                        <div>
+                            <span class="eyebrow">Course</span>
+                            <h2>ধাপে ধাপে সাজানো পাঠ</h2>
+                            <p>প্রতিটা course কয়েকটা ছোট পাঠে ভাগ করা। একটা পাঠ দেড় মিনিটের মতো।</p>
+                        </div>
+                    </div>
+                    <div class="grid-3 courses">
+                        <template for="course in data.courses">
+                            <Course.Card course="{{ course }}" />
                         </template>
                     </div>
                 </div>
-                <div class="grid-3 courses">
-                    <template for="course in data.courses">
-                        <Course.Card course="{{ course }}" />
-                    </template>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="interactive" class="section alt">
-            <div class="wrap">
-                <div class="section-head">
-                    <div>
-                        <span class="eyebrow">Interactive</span>
-                        <h2>নিজের হাতে করে দেখুন</h2>
-                        <p>ব্রাউজারেই চলে এমন simulator আর খেলা। পড়ার চেয়ে নিজে করে দেখা অনেক সময় বেশি কাজে দেয়।</p>
+            <section id="interactive" class="section alt">
+                <div class="wrap">
+                    <div class="section-head">
+                        <div>
+                            <span class="eyebrow">Interactive</span>
+                            <h2>নিজের হাতে করে দেখুন</h2>
+                            <p>ব্রাউজারেই চলে এমন simulator আর খেলা। পড়ার চেয়ে নিজে করে দেখা অনেক সময় বেশি কাজে দেয়।</p>
+                        </div>
+                    </div>
+                    <div class="grid-3">
+                        <template for="item in data.interactive">
+                            <SimCard item="{{ item }}" />
+                        </template>
                     </div>
                 </div>
-                <div class="grid-3">
-                    <template for="item in data.interactive">
-                        <SimCard item="{{ item }}" />
-                    </template>
-                </div>
-            </div>
-        </section>
-
-        <section class="follow">
-            <div class="wrap">
-                <div class="band rv">
-                    <div>
-                        <h2>নতুন পাঠ এলে জানতে চান?</h2>
-                        <p>Laravel সিরিজসহ নতুন পাঠের খবর msilabs-এর LinkedIn পেইজে দেওয়া হয়।</p>
-                    </div>
-                    <a class="btn btn-primary" href="{{ data.site.links.linkedin }}" target="_blank" rel="noopener">LinkedIn-এ follow করুন</a>
-                </div>
-            </div>
-        </section>
+            </section>
+        </template>
     </template>
 </template>
 
@@ -143,22 +108,9 @@
     .fbody h2{font-size:24px;line-height:1.35;font-weight:700;margin:12px 0 6px}
     .fbody p{color:var(--muted);font-size:15.5px}
 
-    .why{padding:8px 0 24px}
-    .tile{padding:28px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border)}
-    .ic{display:inline-grid;place-items:center;min-width:46px;height:46px;padding:0 10px;border-radius:12px;background:rgba(30,214,168,.1);border:1px solid rgba(30,214,168,.25);color:var(--mint);font:600 15px/1 var(--mono)}
-    .tile h3{font-size:20px;font-weight:700;margin:18px 0 6px}
-    .tile p{color:var(--muted);font-size:15.5px}
-
-    .filters{display:flex;flex-wrap:wrap;gap:8px}
-    .fchip{font:500 14.5px/1 var(--sans);padding:10px 16px;border-radius:999px;border:1px solid var(--border-2);background:var(--surface);color:var(--muted);cursor:pointer;transition:background .15s,color .15s,border-color .15s}
-    .fchip:hover{color:var(--text);border-color:rgba(255,255,255,.3)}
-    .fchip.on{background:var(--text);border-color:var(--text);color:var(--bg);font-weight:600}
-    .alt{background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-
-    .follow{padding:96px 0}
-    .band{display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap;padding:44px 48px;border-radius:28px;background:radial-gradient(600px 300px at 0% 0%,rgba(30,214,168,.18),transparent 70%),radial-gradient(500px 300px at 100% 100%,rgba(124,131,255,.18),transparent 70%),var(--bg-3);border:1px solid var(--border-2)}
-    .band h2{font-size:clamp(24px,3vw,32px);font-weight:700}
-    .band p{color:var(--muted);margin-top:6px}
+    #courses{padding-top:24px}
+    .courses{grid-template-columns:repeat(2,1fr)}
+    .alt{background:var(--bg-2);border-top:1px solid var(--border)}
 
     @media (max-width:960px){
         .hero{padding:56px 0 72px}
@@ -169,30 +121,6 @@
         .cta .btn{flex:1 1 auto}
         .stats{gap:12px 26px}
         .stats dd{font-size:24px}
-        .band{padding:30px 22px}
-        .follow{padding:64px 0}
+        .courses{grid-template-columns:1fr}
     }
 </style>
-
-<style global>
-    .courses > [hidden]{display:none !important}
-</style>
-
-<script>
-    const chips = document.querySelectorAll('.fchip');
-    const cards = document.querySelectorAll('.courses [data-topic]');
-
-    chips.forEach((chip) => {
-        chip.addEventListener('click', () => {
-            const topic = chip.dataset.filter;
-            chips.forEach((c) => {
-                const active = c === chip;
-                c.classList.toggle('on', active);
-                c.setAttribute('aria-pressed', String(active));
-            });
-            cards.forEach((card) => {
-                card.hidden = topic !== '' && card.dataset.topic !== topic;
-            });
-        });
-    });
-</script>

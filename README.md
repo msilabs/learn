@@ -21,7 +21,7 @@ GitHub Pages-এ সাইটটা `/learn/` পাথে চলে, তাই 
 ```
 data/courses.json             course-এর তালিকা (id, title, description, topic, color, icon, status)
 data/<course>/<slug>.json     একেকটা পাঠ: অডিও, ক্যাপশন আর দৃশ্য
-data/interactive.json         simulator-এর কার্ড
+data/interactive.json         simulator-এর কার্ড; `lessons` (যেমন `["laravel/eloquent"]`) দিলে সেই পাঠের পাশে "নিজে করে দেখুন" link আসে
 public/audio/<course>/<slug>.mp3
 public/og/<course>/<slug>.jpg thumbnail আর শেয়ারের ছবি (১২০০×৬৩০)
 drafts/<course>/<NN>-<slug>/  পাঠের ড্রাফট (<slug>.md) আর voice script; নম্বর শুধু ক্রমের জন্য, URL-এ যায় না

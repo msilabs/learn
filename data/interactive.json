@@ -1,17 +1,18 @@
 [
     {
-        "name": "Git Simulator",
-        "description": "ব্রাউজারে fake terminal আর commit graph। প্রতিটা command-এর বাংলা ব্যাখ্যা, ১১টা mission।",
-        "topic": "Git",
-        "color": "sun",
-        "icon": "🌿",
-        "meta": "১১টা mission",
-        "href": "https://msilabs.github.io/git-simulator/",
-        "github": "https://github.com/msilabs/git-simulator"
+        "name": "SQL Playground",
+        "description": "ব্রাউজারে আসল SQLite। প্রতিটা query-র বাংলা ব্যাখ্যা, আর ধাপে ধাপে কীভাবে চলে তার ছবি।",
+        "topic": "SQL",
+        "color": "sky",
+        "icon": "🗄️",
+        "meta": "৩৫টা পাঠ, ২৮টা challenge",
+        "href": "https://msilabs.github.io/sql-playground/",
+        "github": "https://github.com/msilabs/sql-playground",
+        "lessons": ["laravel/migration", "laravel/eloquent"]
     },
     {
         "name": "Linux Simulator",
-        "description": "ব্রাউজারে নকল Linux terminal। pipe, chmod, grep নিজের হাতে চালান, প্রতিটা command-এর বাংলা ব্যাখ্যা পান।",
+        "description": "ব্রাউজারে নকল Linux terminal। pipe, chmod, grep চালান, প্রতিটার বাংলা ব্যাখ্যা পান।",
         "topic": "Linux",
         "color": "violet",
         "icon": "🐧",
@@ -20,18 +21,8 @@
         "github": "https://github.com/msilabs/linux-simulator"
     },
     {
-        "name": "SQL Playground",
-        "description": "ব্রাউজারে আসল SQLite। প্রতিটা query-র বাংলা ব্যাখ্যা, ধাপে ধাপে table আর JOIN-এর ছবি।",
-        "topic": "SQL",
-        "color": "sky",
-        "icon": "🗄️",
-        "meta": "৩৫টা পাঠ, ২৮টা challenge",
-        "href": "https://msilabs.github.io/sql-playground/",
-        "github": "https://github.com/msilabs/sql-playground"
-    },
-    {
         "name": "Regex Lab",
-        "description": "বাংলাদেশি ফোন, NID আর টাকার তৈরি pattern, প্রতিটা টুকরোর বাংলা ব্যাখ্যা, পাঠ আর challenge।",
+        "description": "বাংলাদেশি ফোন, NID আর টাকার তৈরি pattern, বাংলা ব্যাখ্যা আর Laravel-সহ চার ভাষার কোড।",
         "topic": "Regex",
         "color": "coral",
         "icon": "🔍",
@@ -40,18 +31,28 @@
         "github": "https://github.com/msilabs/regex-lab"
     },
     {
+        "name": "Git Simulator",
+        "description": "নকল terminal আর commit graph। merge conflict থেকে push-pull, সব বাংলা ব্যাখ্যাসহ।",
+        "topic": "Git",
+        "color": "sun",
+        "icon": "🌿",
+        "meta": "১১টা mission",
+        "href": "https://msilabs.github.io/git-simulator/",
+        "github": "https://github.com/msilabs/git-simulator"
+    },
+    {
         "name": "Scaling Simulator",
-        "description": "Load balancer, cache, replica আর autoscaling নিজের হাতে বসিয়ে দেখুন, traffic বাড়লে সার্ভার কেমন আচরণ করে।",
+        "description": "Load balancer, cache আর read replica বসান, বাজেটের মধ্যে traffic-এর ভিড় সামলান।",
         "topic": "System design",
         "color": "indigo",
         "icon": "📈",
-        "meta": "৬টা চ্যালেঞ্জ",
+        "meta": "৬টা challenge",
         "href": "https://msilabs.github.io/scaling-simulator/",
         "github": "https://github.com/msilabs/scaling-simulator"
     },
     {
         "name": "কোড টাইপিং",
-        "description": "১৪টা ভাষার আসল কোড টাইপ করার খেলা। ব্র্যাকেট, সেমিকোলন আর চিহ্নে হাত পাকান।",
+        "description": "PHP থেকে Rust, আসল কোড টাইপ করুন। গতি, নির্ভুলতা আর কোন চিহ্নে ভুল হয় তার হিসাব।",
         "topic": "টাইপিং",
         "color": "mint",
         "icon": "⌨️",

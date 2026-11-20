@@ -1,29 +1,26 @@
 <template>
     <article class="sim rv">
-        <a class="cl" href="{{ props.item.href }}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
-            <Cover color="{{ props.item.color }}" icon="{{ props.item.icon }}" meta="{{ props.item.meta }}" open />
-        </a>
-        <div class="body">
-            <span class="topic">Interactive · {{ props.item.topic }}</span>
-            <h3><a href="{{ props.item.href }}" target="_blank" rel="noopener">{{ props.item.name }}</a></h3>
-            <p>{{ props.item.description }}</p>
-            <a class="gh" href="{{ props.item.github }}" target="_blank" rel="noopener">GitHub ↗</a>
+        <h3><span aria-hidden="true">{{ props.item.icon }}</span> {{ props.item.name }}</h3>
+        <p>{{ props.item.description }}</p>
+        <span class="meta">{{ props.item.meta }}</span>
+        <div class="links">
+            <a class="live" href="{{ props.item.href }}" target="_blank" rel="noopener" aria-label="{{ props.item.name }} চালু করুন">চালু করুন ↗</a>
+            <a href="{{ props.item.github }}" target="_blank" rel="noopener" aria-label="{{ props.item.name }}-এর GitHub">GitHub ↗</a>
         </div>
     </article>
 </template>
 
 <style>
-    .sim{display:flex;flex-direction:column;gap:18px;padding:12px 12px 22px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);transition:transform .25s,border-color .25s,background .25s}
-    .sim:hover{transform:translateY(-4px);border-color:rgba(124,131,255,.4);background:var(--surface-2)}
-    .cl{display:block;text-decoration:none}
-    .body{padding:0 8px;display:flex;flex-direction:column;flex:1}
-    .topic{font:600 12px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--indigo)}
-    h3{font-size:22px;line-height:1.35;margin:10px 0 6px;font-weight:700}
-    h3 a{color:inherit;text-decoration:none}
-    h3 a:hover{color:var(--mint)}
-    p{color:var(--muted);font-size:15.5px;margin-bottom:16px}
-    .gh{margin-top:auto;font-size:14.5px;font-weight:600;color:var(--muted);text-decoration:none}
-    .gh:hover{color:var(--text)}
+    .sim{display:flex;flex-direction:column;padding:22px 24px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);transition:border-color .2s}
+    .sim:hover{border-color:var(--border-2)}
+    h3{font-size:20px;line-height:1.35;font-weight:700}
+    p{color:var(--muted);font-size:15.5px;margin:8px 0 10px}
+    .meta{font:500 13px/1.4 var(--mono);color:var(--dim);margin-bottom:18px}
+    .links{margin-top:auto;display:flex;gap:20px;font-size:15px;font-weight:600}
+    .links a{color:var(--muted);text-decoration:none}
+    .links a:hover{color:var(--text)}
+    .links .live{color:var(--mint)}
+    .links .live:hover{color:var(--mint-2)}
 
     @media (prefers-reduced-motion:reduce){
         .sim{transition:none}

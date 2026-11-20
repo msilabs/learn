@@ -1,5 +1,5 @@
 <!-- thumbnail: ডেটা থেকে বানানো gradient cover। thumb দিলে ছবি দেখায়।
-     নিচের লেবেল: seconds (সময়), count + unit (যেমন ৩টা পাঠ), অথবা meta (যেকোনো লেখা)। -->
+     নিচের লেবেল: seconds (সময়), অথবা count + unit (যেমন ৩টা পাঠ)। -->
 <template>
     <div class="cover {{ props.color ?? 'mint' }} {{ props.class }}">
         <template if="props.thumb">
@@ -12,9 +12,6 @@
         <template if="props.soon">
             <span class="badge">শীঘ্রই</span>
         </template>
-        <template else-if="props.open">
-            <span class="btn-c" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16 16 8M9 8h7v7"/></svg></span>
-        </template>
         <template else>
             <span class="btn-c" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span>
         </template>
@@ -23,9 +20,6 @@
         </template>
         <template else-if="props.count">
             <span class="label"><Bn value="{{ props.count }}" />টা {{ props.unit }}</span>
-        </template>
-        <template else-if="props.meta">
-            <span class="label">{{ props.meta }}</span>
         </template>
     </div>
 </template>
