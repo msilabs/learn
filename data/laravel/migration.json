@@ -1,0 +1,724 @@
+{
+    "title": "Migration: ডেটাবেসের version control",
+    "description": "নিজের ডেটাবেসে যোগ করা কলাম সহকর্মীর ডেটাবেসে যাবে কীভাবে? migration ফাইল, up আর down, migrations টেবিলের খাতা, rollback, দেড় মিনিটে।",
+    "order": 7,
+    "date": "2026-11-20",
+    "duration": 92.2,
+    "audio": "/audio/laravel/migration.mp3",
+    "thumb": "/og/laravel/migration.jpg",
+    "captions": [
+        {
+            "t": 0,
+            "text": "নিজের ডেটাবেসে নতুন একটা কলাম যোগ করলেন।"
+        },
+        {
+            "t": 3.5,
+            "text": "সহকর্মীর ডেটাবেসে সেটা যাবে কীভাবে?"
+        },
+        {
+            "t": 6.3,
+            "text": "মুখে বলে দিলে কেউ না কেউ ভুলবেই।"
+        },
+        {
+            "t": 8.7,
+            "text": "আর লাইভ সার্ভারে ভুল টেবিল মানে ভাঙা সাইট।"
+        },
+        {
+            "t": 12.2,
+            "text": "Migration টেবিলের গঠনকে কোডে লিখে রাখে।"
+        },
+        {
+            "t": 15.2,
+            "text": "ব্যাপারটা ডেটাবেসের জন্য Git-এর মতো।"
+        },
+        {
+            "t": 18,
+            "text": "অফিসের ভাষায়, রেকর্ড রুমের আলমারির নকশা লেখা থাকে নির্দেশপত্রে।"
+        },
+        {
+            "t": 22.6,
+            "text": "যে শাখাতেই যান, হুবহু একই আলমারি।"
+        },
+        {
+            "t": 25.6,
+            "text": "প্রতিটা migration একটা ফাইল, থাকে database/migrations ফোল্ডারে।"
+        },
+        {
+            "t": 30.8,
+            "text": "নামের শুরুতে থাকে তারিখ আর সময়।"
+        },
+        {
+            "t": 33.5,
+            "text": "ফাইলের ভেতরে দুটো মেথড।"
+        },
+        {
+            "t": 35.4,
+            "text": "up বলে কী বানাতে হবে, down বলে কীভাবে ফিরিয়ে নিতে হবে।"
+        },
+        {
+            "t": 39.7,
+            "text": "যেমন up-এ লেখা, posts টেবিল বানাও, তাতে থাকবে শিরোনাম আর লেখা।"
+        },
+        {
+            "t": 44.7,
+            "text": "তারপর একটা কমান্ড, php artisan migrate।"
+        },
+        {
+            "t": 48.2,
+            "text": "সব টেবিল তৈরি।"
+        },
+        {
+            "t": 49.6,
+            "text": "কিন্তু পরের বার চালালে কি সব আবার নতুন করে বানাবে?"
+        },
+        {
+            "t": 53,
+            "text": "না, Laravel একটা খাতা রাখে migrations নামের টেবিলে!"
+        },
+        {
+            "t": 57.4,
+            "text": "কোনটা চলে গেছে, সব লেখা থাকে।"
+        },
+        {
+            "t": 59.8,
+            "text": "তাই পরের বার শুধু নতুন ফাইলগুলো চলে।"
+        },
+        {
+            "t": 62.6,
+            "text": "সহকর্মী কোড নিয়ে migrate চালালেই, তার ডেটাবেসও আপনার মতো।"
+        },
+        {
+            "t": 66.9,
+            "text": "ভুল হলে rollback চালান।"
+        },
+        {
+            "t": 68.6,
+            "text": "শেষ ধাপের down মেথড চলে, আর বদলটা ফিরে যায়।"
+        },
+        {
+            "t": 72.2,
+            "text": "তবে একটা কথা মনে রাখবেন।"
+        },
+        {
+            "t": 74,
+            "text": "যে migration একবার চলে গেছে, তাকে আর বদলাবেন না।"
+        },
+        {
+            "t": 77.7,
+            "text": "খাতায় সেটা চলা হিসেবে লেখা, তাই বদলালেও আর চলবে না।"
+        },
+        {
+            "t": 81.8,
+            "text": "কলাম যোগ বা বদলাতে হলে, সবসময় নতুন একটা migration বানান।"
+        },
+        {
+            "t": 86.1,
+            "text": "এখনই চালান php artisan migrate:status।"
+        },
+        {
+            "t": 89.9,
+            "text": "দেখবেন কোনটা চলেছে, কোনটা বাকি।"
+        }
+    ],
+    "scene": [
+        {
+            "type": "line",
+            "at": 0,
+            "until": 12.2,
+            "x": 32,
+            "y": 43.5,
+            "w": 36,
+            "dashed": true
+        },
+        {
+            "type": "box",
+            "at": 0,
+            "until": 12.2,
+            "icon": "💻",
+            "text": "আপনার ডেটাবেস",
+            "x": 6,
+            "y": 34,
+            "w": 26
+        },
+        {
+            "type": "box",
+            "at": 0,
+            "until": 12.2,
+            "icon": "💻",
+            "text": "সহকর্মীর ডেটাবেস",
+            "x": 68,
+            "y": 34,
+            "w": 26
+        },
+        {
+            "type": "note",
+            "at": 0,
+            "until": 12.2,
+            "text": "+ views কলাম",
+            "x": 6,
+            "y": 56,
+            "w": 26,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "text",
+            "at": 3.5,
+            "until": 12.2,
+            "text": "❓ কীভাবে যাবে",
+            "x": 68,
+            "y": 56,
+            "w": 26,
+            "tone": "danger"
+        },
+        {
+            "type": "packet",
+            "at": 6.3,
+            "until": 12.2,
+            "text": "🗣️ মুখে বলা",
+            "from": 33,
+            "to": 47,
+            "y": 35,
+            "w": 20,
+            "tone": "danger"
+        },
+        {
+            "type": "box",
+            "at": 8.7,
+            "until": 12.2,
+            "icon": "🖥️",
+            "text": "লাইভ সার্ভার: 💥 ভাঙা সাইট",
+            "x": 34,
+            "y": 56,
+            "w": 32,
+            "tone": "danger"
+        },
+        {
+            "type": "label",
+            "at": 12.2,
+            "until": 18,
+            "text": "Migration: টেবিলের গঠন কোডে",
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 12.2,
+            "until": 18,
+            "text": "Schema::create('posts', …);",
+            "x": 25,
+            "y": 34,
+            "w": 50,
+            "mono": true
+        },
+        {
+            "type": "text",
+            "at": 15.2,
+            "until": 18,
+            "text": "🗂️ ডেটাবেসের জন্য Git",
+            "x": 25,
+            "y": 50,
+            "w": 50,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 18,
+            "until": 25.6,
+            "text": "আলমারির নির্দেশপত্র",
+            "tone": "accent"
+        },
+        {
+            "type": "box",
+            "at": 18,
+            "until": 25.6,
+            "icon": "📜",
+            "text": "নির্দেশপত্র",
+            "x": 6,
+            "y": 36,
+            "w": 24,
+            "tone": "accent"
+        },
+        {
+            "type": "line",
+            "at": 22.6,
+            "until": 25.6,
+            "x": 30,
+            "y": 45.5,
+            "w": 8
+        },
+        {
+            "type": "box",
+            "at": 22.6,
+            "until": 25.6,
+            "icon": "🗄️",
+            "text": "শাখা ১",
+            "x": 38,
+            "y": 36,
+            "w": 17
+        },
+        {
+            "type": "box",
+            "at": 22.6,
+            "until": 25.6,
+            "icon": "🗄️",
+            "text": "শাখা ২",
+            "x": 58,
+            "y": 36,
+            "w": 17
+        },
+        {
+            "type": "box",
+            "at": 22.6,
+            "until": 25.6,
+            "icon": "🗄️",
+            "text": "শাখা ৩",
+            "x": 78,
+            "y": 36,
+            "w": 17
+        },
+        {
+            "type": "text",
+            "at": 22.6,
+            "until": 25.6,
+            "text": "হুবহু একই আলমারি ✓",
+            "x": 38,
+            "y": 60,
+            "w": 57,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 25.6,
+            "until": 33.5,
+            "text": "database/migrations"
+        },
+        {
+            "type": "note",
+            "at": 25.6,
+            "until": 33.5,
+            "text": "📂 database/migrations/",
+            "x": 15,
+            "y": 24,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 25.6,
+            "until": 33.5,
+            "text": "2026_11_20_093000_create_posts_table.php",
+            "x": 15,
+            "y": 34,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 25.6,
+            "until": 33.5,
+            "text": "2026_11_21_101500_add_views_to_posts_table.php",
+            "x": 15,
+            "y": 43,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "text",
+            "at": 30.8,
+            "until": 33.5,
+            "text": "👆 শুরুতে তারিখ আর সময়",
+            "x": 15,
+            "y": 56,
+            "w": 70,
+            "tone": "accent",
+            "align": "left"
+        },
+        {
+            "type": "label",
+            "at": 33.5,
+            "until": 39.7,
+            "text": "দুটো মেথড: up আর down"
+        },
+        {
+            "type": "note",
+            "at": 33.5,
+            "until": 39.7,
+            "text": "public function up() { … }",
+            "x": 20,
+            "y": 24,
+            "w": 60,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 33.5,
+            "until": 39.7,
+            "text": "public function down() { … }",
+            "x": 20,
+            "y": 33,
+            "w": 60,
+            "mono": true
+        },
+        {
+            "type": "box",
+            "at": 35.4,
+            "until": 39.7,
+            "icon": "⬆️",
+            "text": "up: কী বানাতে হবে",
+            "x": 8,
+            "y": 46,
+            "w": 40,
+            "tone": "ok"
+        },
+        {
+            "type": "box",
+            "at": 35.4,
+            "until": 39.7,
+            "icon": "⬇️",
+            "text": "down: কীভাবে ফেরাতে হবে",
+            "x": 52,
+            "y": 46,
+            "w": 40,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 39.7,
+            "until": 44.7,
+            "text": "up-এ: posts টেবিল"
+        },
+        {
+            "type": "note",
+            "at": 39.7,
+            "until": 44.7,
+            "text": "Schema::create('posts', function (Blueprint $table) {",
+            "x": 10,
+            "y": 22,
+            "w": 80,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 39.7,
+            "until": 44.7,
+            "text": "    $table->id();",
+            "x": 10,
+            "y": 31,
+            "w": 80,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 39.7,
+            "until": 44.7,
+            "text": "    $table->string('title');   // শিরোনাম",
+            "x": 10,
+            "y": 40,
+            "w": 80,
+            "mono": true,
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 39.7,
+            "until": 44.7,
+            "text": "    $table->text('body');   // লেখা",
+            "x": 10,
+            "y": 49,
+            "w": 80,
+            "mono": true,
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 39.7,
+            "until": 44.7,
+            "text": "});",
+            "x": 10,
+            "y": 58,
+            "w": 80,
+            "mono": true
+        },
+        {
+            "type": "label",
+            "at": 44.7,
+            "until": 49.6,
+            "text": "php artisan migrate"
+        },
+        {
+            "type": "note",
+            "at": 44.7,
+            "until": 49.6,
+            "text": "$ php artisan migrate",
+            "x": 15,
+            "y": 30,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 48.2,
+            "until": 49.6,
+            "text": "create_posts_table · DONE ✓",
+            "x": 15,
+            "y": 42,
+            "w": 70,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 49.6,
+            "until": 53,
+            "text": "আবার চালালে?"
+        },
+        {
+            "type": "text",
+            "at": 49.6,
+            "until": 53,
+            "text": "সব আবার নতুন করে? 🤔",
+            "x": 25,
+            "y": 42,
+            "w": 50,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 53,
+            "until": 62.6,
+            "text": "migrations টেবিল: খাতা 📒",
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 57.4,
+            "until": 62.6,
+            "text": "📒 migrations",
+            "x": 20,
+            "y": 24,
+            "w": 60
+        },
+        {
+            "type": "note",
+            "at": 57.4,
+            "until": 62.6,
+            "text": "create_users_table · চলে গেছে ✓",
+            "x": 20,
+            "y": 34,
+            "w": 60,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 57.4,
+            "until": 62.6,
+            "text": "create_posts_table · চলে গেছে ✓",
+            "x": 20,
+            "y": 43,
+            "w": 60,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 59.8,
+            "until": 62.6,
+            "text": "add_views_to_posts_table · নতুন 👉 চলবে",
+            "x": 20,
+            "y": 52,
+            "w": 60,
+            "mono": true,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 62.6,
+            "until": 66.9,
+            "text": "দুজনের ডেটাবেস একই",
+            "tone": "ok"
+        },
+        {
+            "type": "box",
+            "at": 62.6,
+            "until": 66.9,
+            "icon": "💻",
+            "text": "আপনার ডেটাবেস",
+            "x": 6,
+            "y": 32,
+            "w": 26,
+            "tone": "ok"
+        },
+        {
+            "type": "box",
+            "at": 62.6,
+            "until": 66.9,
+            "icon": "💻",
+            "text": "সহকর্মীর ডেটাবেস",
+            "x": 68,
+            "y": 32,
+            "w": 26,
+            "tone": "ok"
+        },
+        {
+            "type": "text",
+            "at": 62.6,
+            "until": 66.9,
+            "text": "= হুবহু এক ✓",
+            "x": 34,
+            "y": 39,
+            "w": 32,
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 62.6,
+            "until": 66.9,
+            "text": "$ php artisan migrate",
+            "x": 30,
+            "y": 58,
+            "w": 40,
+            "mono": true
+        },
+        {
+            "type": "label",
+            "at": 66.9,
+            "until": 72.2,
+            "text": "rollback ↩️"
+        },
+        {
+            "type": "note",
+            "at": 66.9,
+            "until": 72.2,
+            "text": "$ php artisan migrate:rollback",
+            "x": 15,
+            "y": 30,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "text",
+            "at": 68.6,
+            "until": 72.2,
+            "text": "⬇️ শেষ ধাপের down চলে, বদলটা ফিরে যায়",
+            "x": 15,
+            "y": 44,
+            "w": 70,
+            "tone": "accent"
+        },
+        {
+            "type": "label",
+            "at": 72.2,
+            "until": 86.1,
+            "text": "সাবধান",
+            "tone": "danger"
+        },
+        {
+            "type": "note",
+            "at": 74,
+            "until": 81.8,
+            "text": "✏️ create_posts_table.php  (চলে গেছে)",
+            "x": 15,
+            "y": 28,
+            "w": 70,
+            "mono": true,
+            "tone": "danger"
+        },
+        {
+            "type": "text",
+            "at": 74,
+            "until": 77.7,
+            "text": "✗ আর বদলাবেন না",
+            "x": 15,
+            "y": 40,
+            "w": 70,
+            "tone": "danger"
+        },
+        {
+            "type": "note",
+            "at": 77.7,
+            "until": 81.8,
+            "text": "📒 migrations: create_posts_table · চলে গেছে ✓",
+            "x": 15,
+            "y": 40,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "text",
+            "at": 77.7,
+            "until": 81.8,
+            "text": "বদলালেও আর চলবে না 🚫",
+            "x": 15,
+            "y": 52,
+            "w": 70,
+            "tone": "danger"
+        },
+        {
+            "type": "note",
+            "at": 81.8,
+            "until": 86.1,
+            "text": "$ php artisan make:migration add_views_to_posts_table",
+            "x": 8,
+            "y": 32,
+            "w": 84,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "text",
+            "at": 81.8,
+            "until": 86.1,
+            "text": "✓ সবসময় নতুন migration",
+            "x": 15,
+            "y": 46,
+            "w": 70,
+            "tone": "ok"
+        },
+        {
+            "type": "label",
+            "at": 86.1,
+            "text": "নিজে দেখুন 👀",
+            "tone": "accent"
+        },
+        {
+            "type": "note",
+            "at": 86.1,
+            "text": "$ php artisan migrate:status",
+            "x": 15,
+            "y": 24,
+            "w": 70,
+            "mono": true
+        },
+        {
+            "type": "note",
+            "at": 89.9,
+            "text": "create_users_table · Ran",
+            "x": 15,
+            "y": 36,
+            "w": 70,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 89.9,
+            "text": "create_posts_table · Ran",
+            "x": 15,
+            "y": 45,
+            "w": 70,
+            "mono": true,
+            "tone": "ok"
+        },
+        {
+            "type": "note",
+            "at": 89.9,
+            "text": "add_views_to_posts_table · Pending",
+            "x": 15,
+            "y": 54,
+            "w": 70,
+            "mono": true,
+            "tone": "accent"
+        }
+    ]
+}
